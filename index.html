@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loja de Doces</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<style>
+  /* Reset básico */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff0f5;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  /* Cabeçalho */
+  header {
+    background-color: #ff8fc1;
+    padding: 20px;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  header h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  /* Menu de navegação */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    position: relative;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+  }
+
+  nav a::after {
+    content: "";
+    height: 2px;
+    background: white;
+    width: 0;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    transition: 0.3s ease;
+  }
+
+  nav a:hover::after {
+    width: 100%;
+  }
+
+  /* Área principal */
+  main {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    color: #e91e63;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 20px;
+  }
+
+  /* Rodapé opcional */
+  footer {
+    background-color: #ffe4ec;
+    padding: 15px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #333;
+  }
+
+  /* Animações suaves */
+  a,
+  button {
+    transition: all 0.3s ease-in-out;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+  }
+</style>
+<body>
+  <header>
+    <h1>Caseirinhos da Ne</h1>
+    <nav>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="carrinho.html">Carrinho</a>
+      <a href="login.html" id="linkLogin">Login</a>
+      <a href="cadastro.html" id="linkCadastro">Cadastro</a>
+    </nav>
+  </header>
+  
+  <main>
+    <section>
+      <h2>Bem-vindo à nossa loja!</h2>
+      <p>Somos uma loja que vende doces caseiros maravilhosos, com uma variedade de opções para todos os gostos. Desde balas e chocolates até bolos e tortas, temos tudo o que você precisa para satisfazer seu desejo por doces!</p>
+      <p>Explore nosso catálogo e descubra nossas delícias. Temos certeza de que você encontrará algo que vai adorar!</p>
+      <h2>Entre em contato conosco!</h2>
+      <a href="https://www.instagram.com/caseirinhos.ne/">Nosso Instagram: @caseirinhos.ne</a>
+    </section>
+  </main>
+
+  <!-- Script para esconder login/cadastro se estiver logado -->
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const usuarioLogado = JSON.parse(localStorage.getItem("usuario"));
+      if (usuarioLogado) {
+        const loginLink = document.getElementById("linkLogin");
+        const cadastroLink = document.getElementById("linkCadastro");
+        if (loginLink) loginLink.style.display = "none";
+        if (cadastroLink) cadastroLink.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
