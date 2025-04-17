@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrinho</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #ffe0f0, #ffffff);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #ff8fc1;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      animation: slideIn 0.8s ease-in-out;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffe9f3;
+    }
+
+    nav a::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s;
+      margin: auto;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    h2 {
+      color: #ff5e99;
+      margin: 30px auto 20px;
+      text-align: center;
+    }
+
+    #carrinho {
+      background-color: #fff0f7;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      margin: 40px auto;
+      max-width: 800px;
+    }
+
+    #carrinho div {
+      background: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease;
+    }
+
+    #carrinho div:hover {
+      transform: scale(1.02);
+    }
+
+    #carrinho h4 {
+      color: #ff5e99;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    #carrinho p {
+      font-size: 1rem;
+      color: #444;
+    }
+
+    #carrinho button {
+      background-color: #ff8fc1;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #carrinho button:hover {
+      background-color: #ff5e99;
+    }
+
+    #carrinho h3 {
+      text-align: right;
+      margin-top: 20px;
+      color: #e84393;
+    }
+
+    #finalizarPedido {
+      background-color: #e84393;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 1rem;
+      margin: 30px auto 50px;
+      display: block;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #finalizarPedido:hover {
+      background-color: #d63384;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      #carrinho {
+        padding: 20px;
+        margin: 20px;
+      }
+
+      #finalizarPedido {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Caseirinhos da Ne</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="carrinho.html">Carrinho</a>
+      <a href="login.html">Login</a>
+      <a href="cadastro.html">Cadastro</a>
+    </nav>
+  </header>
+
+  <h2>Seu Carrinho</h2>
+  <div id="carrinho">
+    <!-- Itens do carrinho vão aparecer aqui -->
+  </div>
+  <button id="finalizarPedido">Finalizar Pedido</button>
+
+  <script src="../script.js"></script>
+</body>
+</html>

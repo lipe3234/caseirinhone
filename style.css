@@ -1,0 +1,175 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpo geral */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #ffe0f0, #ffffff);
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Header bonito */
+header {
+  background-color: #ff8fc1;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+header h1 {
+  font-size: 2rem;
+  animation: slideIn 0.8s ease-in-out;
+}
+
+/* Navegação (links lado a lado e centralizados) */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  position: relative;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #ffe9f3;
+}
+
+nav a::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: white;
+  transition: width 0.3s;
+  margin: auto;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* Conteúdo principal */
+main {
+  padding: 40px;
+  max-width: 1000px;
+  margin: auto;
+  animation: fadeIn 1s ease;
+}
+
+h2 {
+  color: #ff5e99;
+  margin-bottom: 15px;
+}
+
+p {
+  color: #444;
+  font-size: 1.1rem;
+}
+
+/* Cards de produtos */
+.produto {
+  background: white;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.produto:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.produto img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+/* Botões padrão e de login/cadastro */
+button {
+  background-color: #ff8fc1;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  margin-top: 10px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: #ff5e99;
+  transform: scale(1.05);
+}
+
+/* Estilo dos formulários (login/cadastro) */
+form {
+  max-width: 400px;
+  margin: 40px auto;
+  background: #fff0f5;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+/* Carrinho */
+#carrinho {
+  margin-top: 30px;
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  main {
+    padding: 20px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
