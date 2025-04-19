@@ -148,4 +148,43 @@
     <div id="resumoPedido">
       <!-- Resumo do pedido será preenchido aqui -->
     </div>
-    <button id="confirmarPagamento">Confirmar Pagamento
+    <button id="confirmarPagamento">Confirmar Pagamento</button>
+  </main>
+
+  <script>
+    // Carrega os dados do carrinho da LocalStorage
+    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+
+    // Preenche o resumo do pedido
+    const resumoPedido = document.getElementById("resumoPedido");
+
+    let total = 0;
+    carrinho.forEach((produto) => {
+      total += produto.preco;
+      const produtoDiv = document.createElement("div");
+      produtoDiv.innerHTML = `
+        <h3>${produto.nome}</h3>
+        <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+      `;
+      resumoPedido.appendChild(produtoDiv);
+    });
+
+    // Exibe o total
+    const totalDiv = document.createElement("div");
+    totalDiv.innerHTML = `<h3>Total: R$ ${total.toFixed(2)}</h3>`;
+    resumoPedido.appendChild(totalDiv);
+
+    // Ação do botão de confirmar pagamento
+    document.getElementById("confirmarPagamento").addEventListener("click", () => {
+      if (carrinho.length === 0) {
+        alert("Seu carrinho está vazio!");
+      } else {
+        // Simula a confirmação de pagamento e redireciona
+        alert("Pagamento confirmado! Agradecemos pela sua compra.");
+        // Aqui você pode redirecionar para uma página de agradecimento
+        window.location.href = "agradecimento.html"; // Página de agradecimento
+      }
+    });
+  </script>
+</body>
+</html>
