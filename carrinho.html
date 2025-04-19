@@ -187,22 +187,26 @@
   <div id="carrinho">
     <!-- Itens do carrinho vão aparecer aqui -->
   </div>
-  <button id="finalizarPedido"><a href="pagamento.html"></a>Finalizar Pedido</button>
+  <button id="finalizarPedido">Finalizar Pedido</button>
 
   <script>
     const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
     const carrinhoContainer = document.getElementById("carrinho");
 
     // Exibe os produtos do carrinho
-    carrinho.forEach((produto) => {
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <h4>${produto.nome}</h4>
-        <p>Descrição: ${produto.descricao}</p>
-        <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
-      `;
-      carrinhoContainer.appendChild(div);
-    });
+    if (carrinho.length === 0) {
+      carrinhoContainer.innerHTML = "<p>Seu carrinho está vazio.</p>";
+    } else {
+      carrinho.forEach((produto) => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <h4>${produto.nome}</h4>
+          <p>Descrição: ${produto.descricao}</p>
+          <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+        `;
+        carrinhoContainer.appendChild(div);
+      });
+    }
 
     // Função para finalizar o pedido
     document.getElementById("finalizarPedido").addEventListener("click", function () {
