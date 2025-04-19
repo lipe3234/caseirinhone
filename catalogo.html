@@ -193,27 +193,47 @@
   </main>
 
   <script>
-    const API_URL = "http://localhost:3000";
+    const produtos = [
+      {
+        nome: "Brigadeiro",
+        descricao: "Brigadeiro tradicional com granulado",
+        preco: 2.5,
+        imagem: "https://cdn.pixabay.com/photo/2020/02/11/17/06/brigadeiro-4840720_960_720.jpg"
+      },
+      {
+        nome: "Beijinho",
+        descricao: "Bolo de cenoura assado na embalagem com cobertura de brigadeiro de chocolate",
+        preco: 2.5,
+        imagem: "d1.jpg"
+      },
+      {
+        nome: "Cajuzinho",
+        descricao: "Mini bolo vulcão de cenoura com cobertura de brigadeiro de chocolate",
+        preco: 2.5,
+        imagem: "d2.jpg"
+      },
+      {
+        nome: "Olho de Sogra",
+        descricao: "Bolo no pote de chocolate e brigadeiro de chocolate Bolo pote massa baunilha, brigadeiro e mousse de chocolate branvo",
+        preco: 3.0,
+        imagem: "d3.jpg"
+      }
+    ];
+
     const produtosContainer = document.getElementById("produtos");
 
-    if (produtosContainer) {
-      fetch(`${API_URL}/produtos`)
-        .then((res) => res.json())
-        .then((produtos) => {
-          produtos.forEach((produto) => {
-            const div = document.createElement("div");
-            div.classList.add("produto");
-            div.innerHTML = `
-              <img src="${produto.imagem}" alt="${produto.nome}" />
-              <h3>${produto.nome}</h3>
-              <p>${produto.descricao}</p>
-              <p><strong>R$ ${produto.preco.toFixed(2)}</strong></p>
-              <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
-            `;
-            produtosContainer.appendChild(div);
-          });
-        });
-    }
+    produtos.forEach((produto) => {
+      const div = document.createElement("div");
+      div.classList.add("produto");
+      div.innerHTML = `
+        <img src="${produto.imagem}" alt="${produto.nome}" />
+        <h3>${produto.nome}</h3>
+        <p>${produto.descricao}</p>
+        <p><strong>R$ ${produto.preco.toFixed(2)}</strong></p>
+        <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
+      `;
+      produtosContainer.appendChild(div);
+    });
 
     function adicionarAoCarrinho(produto) {
       let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
