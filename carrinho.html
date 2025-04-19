@@ -83,44 +83,38 @@
       max-width: 800px;
     }
 
-    #carrinho div {
+    .item {
       background: #ffffff;
       padding: 20px;
       margin-bottom: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 20px;
       transition: transform 0.2s ease;
     }
 
-    #carrinho div:hover {
-      transform: scale(1.02);
+    .item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
     }
 
-    #carrinho h4 {
+    .item-info {
+      flex: 1;
+    }
+
+    .item-info h4 {
       color: #ff5e99;
       font-size: 1.2rem;
       margin-bottom: 8px;
     }
 
-    #carrinho p {
+    .item-info p {
       font-size: 1rem;
       color: #444;
-    }
-
-    #carrinho button {
-      background-color: #ff8fc1;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      margin-top: 10px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    #carrinho button:hover {
-      background-color: #ff5e99;
     }
 
     #carrinho h3 {
@@ -168,7 +162,6 @@
     }
   </style>
 </head>
-
 <body>
   <header>
     <h1>Caseirinhos da Ne</h1>
@@ -182,11 +175,32 @@
   </header>
 
   <h2>Seu Carrinho</h2>
-  <div id="carrinho">
-    <!-- Itens do carrinho vão aparecer aqui -->
-  </div>
+  <div id="carrinho"></div>
+  <h3 id="total"></h3>
   <button id="finalizarPedido">Finalizar Pedido</button>
 
-  <script src="../script.js"></script>
+  <script>
+    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+    const carrinhoDiv = document.getElementById("carrinho");
+    let total = 0;
+
+    carrinho.forEach((item) => {
+      const itemDiv = document.createElement("div");
+      itemDiv.classList.add("item");
+
+      itemDiv.innerHTML = `
+        <img src="${item.imagem}" alt="${item.nome}" />
+        <div class="item-info">
+          <h4>${item.nome}</h4>
+          <p>${item.descricao}</p>
+          <p><strong>R$ ${item.preco.toFixed(2)}</strong></p>
+        </div>
+      `;
+      carrinhoDiv.appendChild(itemDiv);
+      total += item.preco;
+    });
+
+    document.getElementById("total").innerText = `Total: R$ ${total.toFixed(2)}`;
+  </script>
 </body>
 </html>
