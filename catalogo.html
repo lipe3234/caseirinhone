@@ -4,14 +4,12 @@
   <meta charset="UTF-8">
   <title>Catálogo</title>
   <style>
-    /* Reset básico */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    /* Corpo geral */
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to bottom right, #ffe0f0, #ffffff);
@@ -19,7 +17,6 @@
       line-height: 1.6;
     }
 
-    /* Header bonito */
     header {
       background-color: #ff8fc1;
       padding: 20px;
@@ -36,7 +33,6 @@
       animation: slideIn 0.8s ease-in-out;
     }
 
-    /* Navegação (links lado a lado e centralizados) */
     nav {
       display: flex;
       justify-content: center;
@@ -72,7 +68,6 @@
       width: 100%;
     }
 
-    /* Conteúdo principal */
     main {
       padding: 40px;
       max-width: 1000px;
@@ -86,7 +81,6 @@
       text-align: center;
     }
 
-    /* Cards de produtos */
     .produto-container {
       display: flex;
       justify-content: center;
@@ -147,7 +141,6 @@
       color: white;
     }
 
-    /* Animações */
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -172,7 +165,6 @@
       }
     }
 
-    /* Responsivo */
     @media (max-width: 768px) {
       .produto-container {
         flex-direction: column;
@@ -181,24 +173,57 @@
     }
   </style>
 </head>
-<header>
-  <h1>Caseirinhos da Ne</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="catalogo.html">Catálogo</a>
-    <a href="carrinho.html">Carrinho</a>
-    <a href="login.html">Login</a>
-    <a href="cadastro.html">Cadastro</a>
-  </nav>
-</header>
 <body>
+  <header>
+    <h1>Caseirinhos da Ne</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="carrinho.html">Carrinho</a>
+      <a href="login.html">Login</a>
+      <a href="cadastro.html">Cadastro</a>
+    </nav>
+  </header>
+
   <main>
     <h2>Catálogo de Doces</h2>
     <div class="produto-container" id="produtos">
-      <!-- Produtos serão inseridos aqui via JS -->
+      <!-- Produtos via JS -->
     </div>
   </main>
 
-  <script src="../script.js"></script>
+  <script>
+    const API_URL = "http://localhost:3000";
+
+    let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+
+    const produtosContainer = document.getElementById("produtos");
+
+    if (produtosContainer) {
+      fetch(`${API_URL}/produtos`)
+        .then(res => res.json())
+        .then(produtos => {
+          produtos.forEach(produto => {
+            const div = document.createElement("div");
+            div.classList.add("produto");
+            div.innerHTML = `
+              <img src="${produto.imagem}" alt="${produto.nome}">
+              <h3>${produto.nome}</h3>
+              <p>${produto.descricao}</p>
+              <p><strong>R$ ${produto.preco.toFixed(2)}</strong></p>
+              <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
+            `;
+            produtosContainer.appendChild(div);
+          });
+        })
+        .catch(err => console.error("Erro ao carregar produtos:", err));
+    }
+
+    function adicionarAoCarrinho(produto) {
+      carrinho.push(produto);
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+      alert(`${produto.nome} adicionado ao carrinho!`);
+    }
+  </script>
 </body>
 </html>
