@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <title>Cadastro</title>
   <link rel="stylesheet" href="style.css">
-  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
 </head>
 <body>
   <header>
@@ -30,11 +28,10 @@
   </main>
 
   <script type="module">
-    // Importando as bibliotecas do Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
 
-    // Configuração do Firebase
     const firebaseConfig = {
       apiKey: "SUA_API_KEY",
       authDomain: "SEU_AUTH_DOMAIN",
@@ -45,11 +42,10 @@
       appId: "SEU_APP_ID"
     };
 
-    // Inicializando o Firebase
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // Função de cadastro de clientes
     const cadastroForm = document.getElementById("cadastroForm");
     if (cadastroForm) {
       cadastroForm.addEventListener("submit", (e) => {
@@ -60,24 +56,26 @@
         const senha = document.getElementById("cadastroSenha").value;
         const endereco = document.getElementById("cadastroEndereco").value;
 
-        // Cria um ID único para o cliente (usando o timestamp)
-        const clienteId = "cliente" + Date.now();  // ID único baseado no timestamp atual
+        // Cria o usuário no Firebase Authentication
+        createUserWithEmailAndPassword(auth, email, senha)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            const uid = user.uid;
 
-        // Referência ao banco de dados no Firebase
-        const clienteRef = ref(db, 'clientes/' + clienteId); // Caminho para armazenar os dados
-
-        // Salva os dados no Firebase
-        set(clienteRef, {
-          nome: nome,
-          email: email,
-          senha: senha,
-          endereco: endereco
-        }).then(() => {
-          alert("Cadastro realizado com sucesso!");
-          window.location.href = "login.html"; // Redireciona após o cadastro
-        }).catch((error) => {
-          alert("Erro ao cadastrar: " + error.message);
-        });
+            // Salva os dados extras no Realtime Database
+            set(ref(db, 'clientes/' + uid), {
+              nome: nome,
+              email: email,
+              endereco: endereco
+            }).then(() => {
+              alert("Cadastro realizado com sucesso!");
+              window.location.href = "login.html";
+            });
+          })
+          .catch((error) => {
+            console.error("Erro no cadastro:", error);
+            alert("Erro ao cadastrar: " + error.message);
+          });
       });
     }
   </script>
