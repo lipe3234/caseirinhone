@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <title>Cadastro</title>
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
 </head>
 <body>
   <header>
@@ -23,14 +24,14 @@
       padding: 0;
       box-sizing: border-box;
     }
-  
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #fff0f5;
       color: #333;
       line-height: 1.6;
     }
-  
+
     /* Cabeçalho */
     header {
       background-color: #ff8fc1;
@@ -41,13 +42,13 @@
       z-index: 1000;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-  
+
     header h1 {
       text-align: center;
       font-size: 2rem;
       margin-bottom: 10px;
     }
-  
+
     /* Menu de navegação */
     nav {
       display: flex;
@@ -56,7 +57,7 @@
       flex-wrap: wrap;
       margin-bottom: 10px;
     }
-  
+
     nav a {
       color: white;
       text-decoration: none;
@@ -66,7 +67,7 @@
       padding: 5px 10px;
       transition: all 0.3s ease;
     }
-  
+
     nav a::after {
       content: "";
       height: 2px;
@@ -77,11 +78,11 @@
       bottom: -5px;
       transition: 0.3s ease;
     }
-  
+
     nav a:hover::after {
       width: 100%;
     }
-  
+
     /* Área principal */
     main {
       padding: 40px 20px;
@@ -89,19 +90,19 @@
       margin: 0 auto;
       text-align: center;
     }
-  
+
     h2 {
       font-size: 1.8rem;
       color: #ff8fc1;
       margin-bottom: 20px;
     }
-  
+
     p {
       font-size: 1rem;
       color: #444;
       margin-bottom: 20px;
     }
-  
+
     input, button {
       padding: 10px;
       margin: 8px 0;
@@ -110,19 +111,19 @@
       border: 1px solid #ccc;
       border-radius: 6px;
     }
-  
+
     button {
       background-color: #ff8fc1;
       color: white;
       border: none;
       cursor: pointer;
     }
-  
+
     button:hover {
       background-color: #ff8fc1;
       transform: scale(1.05);
     }
-  
+
     /* Rodapé */
     footer {
       background-color: #ffe4ec;
@@ -131,25 +132,9 @@
       font-size: 0.9rem;
       color: #333;
     }
-  
-    /* Produtos */
-    .produto {
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 10px;
-      margin: 15px auto;
-      width: 250px;
-      background-color: #fff;
-      box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-    }
-  
-    .produto img {
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-  
+
   </style>
-  
+
   <main style="text-align:center">
     <h2>Cadastro</h2>
     <form id="cadastroForm">
@@ -160,5 +145,55 @@
       <button type="submit">Cadastrar</button>
     </form>
   </main>
+
+  <script>
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_AUTH_DOMAIN",
+      databaseURL: "SEU_DATABASE_URL",
+      projectId: "SEU_PROJECT_ID",
+      storageBucket: "SEU_STORAGE_BUCKET",
+      messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+      appId: "SEU_APP_ID"
+    };
+
+    // Inicializando o Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Função de cadastro de clientes
+    const cadastroForm = document.getElementById("cadastroForm");
+    if (cadastroForm) {
+      cadastroForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const nome = document.getElementById("cadastroNome").value;
+        const email = document.getElementById("cadastroEmail").value;
+        const senha = document.getElementById("cadastroSenha").value;
+        const endereco = document.getElementById("cadastroEndereco").value;
+
+        // Cria um ID único para o cliente (usando o timestamp)
+        const clienteId = "cliente" + Date.now();  // ID único baseado no timestamp atual
+
+        // Referência ao banco de dados no Firebase
+        const clienteRef = db.ref('clientes/' + clienteId); // Caminho para armazenar os dados
+
+        // Salva os dados no Firebase
+        clienteRef.set({
+          nome: nome,
+          email: email,
+          senha: senha,
+          endereco: endereco
+        }).then(() => {
+          alert("Cadastro realizado com sucesso!");
+          window.location.href = "login.html"; // Redireciona após o cadastro
+        }).catch((error) => {
+          alert("Erro ao cadastrar: " + error.message);
+        });
+      });
+    }
+  </script>
+
 </body>
 </html>
