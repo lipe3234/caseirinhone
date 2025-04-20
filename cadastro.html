@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>Cadastro</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Firebase SDKs -->
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
 </head>
 <body>
   <header>
@@ -56,21 +60,20 @@
         const senha = document.getElementById("cadastroSenha").value;
         const endereco = document.getElementById("cadastroEndereco").value;
 
-        // Cria o usuário no Firebase Authentication
         createUserWithEmailAndPassword(auth, email, senha)
           .then((userCredential) => {
             const user = userCredential.user;
             const uid = user.uid;
 
-            // Salva os dados extras no Realtime Database
-            set(ref(db, 'clientes/' + uid), {
-              nome: nome,
-              email: email,
-              endereco: endereco
-            }).then(() => {
-              alert("Cadastro realizado com sucesso!");
-              window.location.href = "login.html";
+            return set(ref(db, 'clientes/' + uid), {
+              nome,
+              email,
+              endereco
             });
+          })
+          .then(() => {
+            alert("Cadastro realizado com sucesso! Você está logado.");
+            window.location.href = "index.html";
           })
           .catch((error) => {
             console.error("Erro no cadastro:", error);
@@ -79,6 +82,5 @@
       });
     }
   </script>
-
 </body>
 </html>
