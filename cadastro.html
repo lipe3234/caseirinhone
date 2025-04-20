@@ -33,9 +33,10 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
+    // Configuração do Firebase
     const firebaseConfig = {
       apiKey: "SUA_API_KEY",
       authDomain: "SEU_AUTH_DOMAIN",
@@ -46,41 +47,42 @@
       appId: "SEU_APP_ID"
     };
 
+    // Inicializa Firebase
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db = getDatabase(app);
+    const auth = getAuth(app);
 
+    // Captura o formulário
     const cadastroForm = document.getElementById("cadastroForm");
-    if (cadastroForm) {
-      cadastroForm.addEventListener("submit", (e) => {
-        e.preventDefault();
 
-        const nome = document.getElementById("cadastroNome").value;
-        const email = document.getElementById("cadastroEmail").value;
-        const senha = document.getElementById("cadastroSenha").value;
-        const endereco = document.getElementById("cadastroEndereco").value;
+    cadastroForm.addEventListener("submit", (e) => {
+      e.preventDefault();
 
-        createUserWithEmailAndPassword(auth, email, senha)
-          .then((userCredential) => {
-            const user = userCredential.user;
-            const uid = user.uid;
+      const nome = document.getElementById("cadastroNome").value;
+      const email = document.getElementById("cadastroEmail").value;
+      const senha = document.getElementById("cadastroSenha").value;
+      const endereco = document.getElementById("cadastroEndereco").value;
 
-            return set(ref(db, 'clientes/' + uid), {
-              nome,
-              email,
-              endereco
-            });
-          })
-          .then(() => {
-            alert("Cadastro realizado com sucesso! Você está logado.");
-            window.location.href = "index.html";
-          })
-          .catch((error) => {
-            console.error("Erro no cadastro:", error);
-            alert("Erro ao cadastrar: " + error.message);
+      createUserWithEmailAndPassword(auth, email, senha)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          const uid = user.uid;
+
+          // Salva os dados no Realtime Database
+          set(ref(db, 'clientes/' + uid), {
+            nome: nome,
+            email: email,
+            endereco: endereco
           });
-      });
-    }
+
+          // Redireciona após o login
+          alert("Cadastro realizado com sucesso!");
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          alert("Erro ao cadastrar: " + error.message);
+        });
+    });
   </script>
 </body>
 </html>
