@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>Cadastro</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
 </head>
 <body>
   <header>
@@ -17,123 +17,6 @@
       <a href="login.html">Login</a>
     </nav>
   </header>
-  <style>
-    /* Reset básico */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #fff0f5;
-      color: #333;
-      line-height: 1.6;
-    }
-
-    /* Cabeçalho */
-    header {
-      background-color: #ff8fc1;
-      padding: 20px;
-      color: white;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    header h1 {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    /* Menu de navegação */
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1rem;
-      position: relative;
-      padding: 5px 10px;
-      transition: all 0.3s ease;
-    }
-
-    nav a::after {
-      content: "";
-      height: 2px;
-      background: white;
-      width: 0;
-      position: absolute;
-      left: 0;
-      bottom: -5px;
-      transition: 0.3s ease;
-    }
-
-    nav a:hover::after {
-      width: 100%;
-    }
-
-    /* Área principal */
-    main {
-      padding: 40px 20px;
-      max-width: 1000px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    h2 {
-      font-size: 1.8rem;
-      color: #ff8fc1;
-      margin-bottom: 20px;
-    }
-
-    p {
-      font-size: 1rem;
-      color: #444;
-      margin-bottom: 20px;
-    }
-
-    input, button {
-      padding: 10px;
-      margin: 8px 0;
-      width: 250px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    button {
-      background-color: #ff8fc1;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #ff8fc1;
-      transform: scale(1.05);
-    }
-
-    /* Rodapé */
-    footer {
-      background-color: #ffe4ec;
-      padding: 15px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #333;
-    }
-
-  </style>
 
   <main style="text-align:center">
     <h2>Cadastro</h2>
@@ -146,7 +29,11 @@
     </form>
   </main>
 
-  <script>
+  <script type="module">
+    // Importando as bibliotecas do Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+
     // Configuração do Firebase
     const firebaseConfig = {
       apiKey: "SUA_API_KEY",
@@ -159,8 +46,8 @@
     };
 
     // Inicializando o Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
     // Função de cadastro de clientes
     const cadastroForm = document.getElementById("cadastroForm");
@@ -177,10 +64,10 @@
         const clienteId = "cliente" + Date.now();  // ID único baseado no timestamp atual
 
         // Referência ao banco de dados no Firebase
-        const clienteRef = db.ref('clientes/' + clienteId); // Caminho para armazenar os dados
+        const clienteRef = ref(db, 'clientes/' + clienteId); // Caminho para armazenar os dados
 
         // Salva os dados no Firebase
-        clienteRef.set({
+        set(clienteRef, {
           nome: nome,
           email: email,
           senha: senha,
