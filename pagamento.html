@@ -95,6 +95,11 @@
       margin-bottom: 10px;
     }
 
+    #resumoPedido p {
+      color: white;
+      font-size: 1rem;
+    }
+
     #confirmarPagamento {
       background-color: #e84393;
       color: white;
@@ -152,38 +157,36 @@
   </main>
 
   <script>
-    // Carrega os dados do carrinho da LocalStorage
     const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-
-    // Preenche o resumo do pedido
     const resumoPedido = document.getElementById("resumoPedido");
 
     let total = 0;
-    carrinho.forEach((produto) => {
-      total += produto.preco;
-      const produtoDiv = document.createElement("div");
-      produtoDiv.innerHTML = `
-        <h3>${produto.nome}</h3>
-        <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
-      `;
-      resumoPedido.appendChild(produtoDiv);
-    });
 
-    // Exibe o total
-    const totalDiv = document.createElement("div");
-    totalDiv.innerHTML = `<h3>Total: R$ ${total.toFixed(2)}</h3>`;
-    resumoPedido.appendChild(totalDiv);
+    if (carrinho.length === 0) {
+      resumoPedido.innerHTML = "<p>Seu carrinho está vazio.</p>";
+    } else {
+      carrinho.forEach((produto) => {
+        total += produto.preco;
+        const produtoDiv = document.createElement("div");
+        produtoDiv.innerHTML = `
+          <h3>${produto.nome}</h3>
+          <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+        `;
+        resumoPedido.appendChild(produtoDiv);
+      });
 
-    // Ação do botão de confirmar pagamento
+      const totalDiv = document.createElement("div");
+      totalDiv.innerHTML = `<h3>Total: R$ ${total.toFixed(2)}</h3>`;
+      resumoPedido.appendChild(totalDiv);
+    }
+
     document.getElementById("confirmarPagamento").addEventListener("click", () => {
       if (carrinho.length === 0) {
         alert("Seu carrinho está vazio!");
       } else {
-        // Simula a confirmação de pagamento e redireciona
         alert("Pagamento confirmado! Agradecemos pela sua compra.");
-        <a href ="index.html"></a>;
-        // Aqui você pode redirecionar para uma página de agradecimento
-        window.location.href = "agradecimento.html"; // Página de agradecimento
+        localStorage.removeItem("carrinho"); // limpa o carrinho
+        window.location.href = "index.html"; // redireciona para home
       }
     });
   </script>
