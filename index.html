@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Loja de Doces</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Firebase SDKs -->
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
 </head>
 <style>
   /* Reset básico */
@@ -21,7 +24,6 @@
     line-height: 1.6;
   }
 
-  /* Cabeçalho */
   header {
     background-color: #ff8fc1;
     padding: 20px;
@@ -38,7 +40,6 @@
     margin-bottom: 10px;
   }
 
-  /* Menu de navegação */
   nav {
     display: flex;
     justify-content: center;
@@ -72,7 +73,6 @@
     width: 100%;
   }
 
-  /* Área principal */
   main {
     padding: 40px 20px;
     max-width: 1000px;
@@ -91,7 +91,6 @@
     margin-bottom: 20px;
   }
 
-  /* Rodapé opcional */
   footer {
     background-color: #ffe4ec;
     padding: 15px;
@@ -100,9 +99,7 @@
     color: #333;
   }
 
-  /* Animações suaves */
-  a,
-  button {
+  a, button {
     transition: all 0.3s ease-in-out;
   }
 
@@ -131,15 +128,35 @@
     </section>
   </main>
 
-  <!-- Script para esconder login/cadastro se estiver logado -->
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      const usuarioLogado = JSON.parse(localStorage.getItem("usuario"));
-      if (usuarioLogado) {
-        const loginLink = document.getElementById("linkLogin");
-        const cadastroLink = document.getElementById("linkCadastro");
-        if (loginLink) loginLink.style.display = "none";
-        if (cadastroLink) cadastroLink.style.display = "none";
+  <!-- Verificação de autenticação do usuário -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_AUTH_DOMAIN",
+      projectId: "SEU_PROJECT_ID",
+      storageBucket: "SEU_STORAGE_BUCKET",
+      messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+      appId: "SEU_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      const linkLogin = document.getElementById("linkLogin");
+      const linkCadastro = document.getElementById("linkCadastro");
+
+      if (user) {
+        // Usuário logado → esconde os links
+        if (linkLogin) linkLogin.style.display = "none";
+        if (linkCadastro) linkCadastro.style.display = "none";
+      } else {
+        // Usuário deslogado → mantém visíveis
+        if (linkLogin) linkLogin.style.display = "inline";
+        if (linkCadastro) linkCadastro.style.display = "inline";
       }
     });
   </script>
