@@ -38,6 +38,7 @@ if (cadastroForm) {
       const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
       const userId = userCredential.user.uid;
 
+      // Salvar os dados do usuário no Firebase
       await set(ref(db, `usuarios/${userId}`), {
         nome,
         email,
@@ -67,6 +68,7 @@ if (loginForm) {
       const userSnapshot = await get(ref(db, `usuarios/${userId}`));
       const userData = userSnapshot.val();
 
+      // Salvar as informações do usuário no localStorage
       localStorage.setItem("usuario", JSON.stringify({ id: userId, ...userData }));
       alert("Login realizado!");
       window.location.href = "catalogo.html";
