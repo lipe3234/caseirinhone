@@ -1,5 +1,23 @@
-// URL base do backend
-const API_URL = "http://localhost:3000";
+// Firebase SDK
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+// Configuração do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBgPvmrfclA8XTGtTsSCeDE390wVK46V9E",
+  authDomain: "caseirinhosne.firebaseapp.com",
+  projectId: "caseirinhosne",
+  storageBucket: "caseirinhosne.firebasestorage.app",
+  messagingSenderId: "446497107875",
+  appId: "1:446497107875:web:d0c57713931048a96eb416",
+  measurementId: "G-JDZMDE7K1E",
+  databaseURL: "https://caseirinhosne-default-rtdb.firebaseio.com"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
 
 // Verifica se está logado
 let usuarioLogado = JSON.parse(localStorage.getItem("usuario")) || null;
@@ -16,14 +34,20 @@ if (cadastroForm) {
     const senha = document.getElementById("cadastroSenha").value;
     const endereco = document.getElementById("cadastroEndereco").value;
 
-    const res = await fetch(`${API_URL}/usuarios/cadastrar`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, email, senha, endereco }),
-    });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+      const userId = userCredential.user.uid;
 
-    const data = await res.json();
-    alert(data.message || "Cadastro realizado!");
+      await set(ref(db, `usuarios/${userId}`), {
+        nome,
+        email,
+        endereco
+      });
+
+      alert("Cadastro realizado com sucesso!");
+    } catch (error) {
+      alert("Erro ao cadastrar: " + error.message);
+    }
   });
 }
 
@@ -36,19 +60,18 @@ if (loginForm) {
     const email = document.getElementById("loginEmail").value;
     const senha = document.getElementById("loginSenha").value;
 
-    const res = await fetch(`${API_URL}/usuarios/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, senha }),
-    });
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+      const userId = userCredential.user.uid;
 
-    const data = await res.json();
-    if (res.ok) {
+      const userSnapshot = await get(ref(db, `usuarios/${userId}`));
+      const userData = userSnapshot.val();
+
+      localStorage.setItem("usuario", JSON.stringify({ id: userId, ...userData }));
       alert("Login realizado!");
-      localStorage.setItem("usuario", JSON.stringify(data.usuario));
       window.location.href = "catalogo.html";
-    } else {
-      alert(data.message || "Erro ao fazer login");
+    } catch (error) {
+      alert("Erro ao fazer login: " + error.message);
     }
   });
 }
@@ -56,10 +79,10 @@ if (loginForm) {
 // Produtos no catálogo
 const produtosContainer = document.getElementById("produtos");
 if (produtosContainer) {
-  fetch(`${API_URL}/produtos`)
-    .then((res) => res.json())
-    .then((produtos) => {
-      produtos.forEach((produto) => {
+  get(ref(db, "produtos")).then((snapshot) => {
+    const produtos = snapshot.val();
+    if (produtos) {
+      Object.values(produtos).forEach((produto) => {
         const div = document.createElement("div");
         div.classList.add("produto");
         div.innerHTML = `
@@ -71,7 +94,8 @@ if (produtosContainer) {
         `;
         produtosContainer.appendChild(div);
       });
-    });
+    }
+  });
 }
 
 // Adicionar ao carrinho
@@ -87,3 +111,29 @@ const finalizarBtn = document.getElementById("finalizarPedido");
 
 if (carrinhoContainer && finalizarBtn) {
   if (carrinho.length === 0) {
+    carrinhoContainer.innerHTML = "<p>O carrinho está vazio.</p>";
+  } else {
+    carrinho.forEach((item) => {
+      const div = document.createElement("div");
+      div.innerHTML = `<strong>${item.nome}</strong> - R$ ${item.preco.toFixed(2)}`;
+      carrinhoContainer.appendChild(div);
+    });
+
+    finalizarBtn.addEventListener("click", () => {
+      if (usuarioLogado) {
+        const pedidoRef = push(ref(db, "pedidos"));
+        set(pedidoRef, {
+          usuarioId: usuarioLogado.id,
+          carrinho,
+          data: new Date().toISOString()
+        });
+        alert("Pedido finalizado!");
+        localStorage.removeItem("carrinho");
+        window.location.href = "pagamento.html";
+      } else {
+        alert("Faça login antes de finalizar o pedido.");
+        window.location.href = "login.html";
+      }
+    });
+  }
+}
