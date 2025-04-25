@@ -241,15 +241,7 @@
       localStorage.setItem("carrinho", JSON.stringify(carrinho));
       alert(${produto.nome} adicionado ao carrinho!);
     }
-  window.addEventListener("DOMContentLoaded", () => {
-    const usuarioLogado = JSON.parse(localStorage.getItem("usuario"));
-    if (usuarioLogado) {
-      const linkLogin = document.getElementById("linkLogin");
-      const linkCadastro = document.getElementById("linkCadastro");
-      if (linkLogin) linkLogin.style.display = "none";
-      if (linkCadastro) linkCadastro.style.display = "none";
-    }
-  });
+ 
 
 
   </script>
