@@ -7,7 +7,52 @@
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
-  <script src="script.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #333;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .catalogo-container {
+      margin: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .produto-card {
+      background-color: #fff;
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -17,11 +62,23 @@
     </nav>
   </header>
 
-  <div id="catalogo">
+  <div id="catalogo" class="catalogo-container">
     <!-- Produtos serão carregados aqui -->
   </div>
 
   <script>
+    // Inicializando Firebase
+    const firebaseConfig = {
+      apiKey: "your-api-key",
+      authDomain: "your-auth-domain",
+      databaseURL: "your-database-url",
+      projectId: "your-project-id",
+      storageBucket: "your-storage-bucket",
+      messagingSenderId: "your-sender-id",
+      appId: "your-app-id"
+    };
+    firebase.initializeApp(firebaseConfig);
+
     // Exemplo de produtos, você pode buscar do Firebase ou adicionar manualmente
     const produtos = [
       { nome: "Bolo de Chocolate", descricao: "Delicioso bolo de chocolate", preco: 25.00 },
@@ -41,6 +98,7 @@
     const catalogoContainer = document.getElementById("catalogo");
     produtos.forEach((produto) => {
       const div = document.createElement("div");
+      div.classList.add("produto-card");
       div.innerHTML = `
         <h3>${produto.nome}</h3>
         <p>${produto.descricao}</p>
@@ -48,6 +106,17 @@
         <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
       `;
       catalogoContainer.appendChild(div);
+    });
+
+    // Controlando a visibilidade dos links com base na autenticação
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        document.getElementById("linkLogin").style.display = "none";
+        document.getElementById("linkCadastro").style.display = "none";
+      } else {
+        document.getElementById("linkLogin").style.display = "block";
+        document.getElementById("linkCadastro").style.display = "block";
+      }
     });
   </script>
 </body>
