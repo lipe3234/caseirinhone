@@ -1,245 +1,54 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catálogo</title>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+  <script src="script.js"></script>
 </head>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #ffe0f0, #ffffff);
-      color: #333;
-      line-height: 1.6;
-    }
-
-    header {
-      background-color: #ff8fc1;
-      padding: 20px;
-      text-align: center;
-      color: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    header h1 {
-      font-size: 2rem;
-      animation: slideIn 0.8s ease-in-out;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin-top: 15px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1rem;
-      position: relative;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #ffe9f3;
-    }
-
-    nav a::after {
-      content: '';
-      display: block;
-      width: 0;
-      height: 2px;
-      background: white;
-      transition: width 0.3s;
-      margin: auto;
-    }
-
-    nav a:hover::after {
-      width: 100%;
-    }
-
-    main {
-      padding: 40px;
-      max-width: 1000px;
-      margin: auto;
-      animation: fadeIn 1s ease;
-    }
-
-    h2 {
-      color: #ff5e99;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-
-    .produto-container {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-top: 30px;
-    }
-
-    .produto {
-      background-color: #ff8fc1;
-      padding: 20px;
-      border-radius: 10px;
-      width: 200px;
-      text-align: center;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      margin-bottom: 20px;
-    }
-
-    .produto:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    .produto img {
-      width: 100%;
-      max-height: 150px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-
-    .produto h3 {
-      font-size: 1.2rem;
-      margin-top: 10px;
-      color: white;
-    }
-
-    .produto p {
-      color: white;
-      font-size: 1rem;
-      margin: 5px 0;
-    }
-
-    .produto button {
-      background-color: white;
-      color: #ff8fc1;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 25px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background 0.3s ease;
-    }
-
-    .produto button:hover {
-      background-color: #ff5e99;
-      color: white;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .produto-container {
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-  </style>
 <body>
   <header>
-    <h1>Caseirinhos da Ne</h1>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="carrinho.html">Carrinho</a>
-      <a href="login.html">Login</a>
-      <a href="cadastro.html">Cadastro</a>
+      <a href="index.html" id="linkLogin">Login</a>
+      <a href="cadastro.html" id="linkCadastro">Cadastro</a>
     </nav>
   </header>
 
-  <main>
-    <h2>Catálogo de Doces</h2>
-    <div class="produto-container" id="produtos">
-      <!-- Produtos serão inseridos aqui via JS -->
-    </div>
-  </main>
+  <div id="catalogo">
+    <!-- Produtos serão carregados aqui -->
+  </div>
 
   <script>
+    // Exemplo de produtos, você pode buscar do Firebase ou adicionar manualmente
     const produtos = [
-      {
-        nome: "Bolo de cenoura",
-        descricao: "Bolo de cenoura assado na embalagem com cobertura de brigadeiro de chocolate",
-        preco: 2.5,
-        imagem: "d1.jpg"
-      },
-      {
-        nome: "Bolo no pote",
-        descricao: "Bolo no pote de chocolate e brigadeiro de chocolate. Bolo pote massa baunilha, brigadeiro e mousse de chocolate branco",
-        preco: 2.5,
-        imagem: "d2.jpg"
-      },
-      {
-        nome: "Mini bolo",
-        descricao: "Mini bolo vulcão de cenoura com cobertura de brigadeiro de chocolate",
-        preco: 2.5,
-        imagem: "d3.jpg"
-      },
-      {
-        nome: "Pudim",
-        descricao: "Pudim de leite condensado",
-        preco: 3.0,
-        imagem: "d4.jpg"
-      }
+      { nome: "Bolo de Chocolate", descricao: "Delicioso bolo de chocolate", preco: 25.00 },
+      { nome: "Doce de Leite", descricao: "Doce de leite caseiro", preco: 15.00 },
+      // adicione mais produtos conforme necessário
     ];
 
-    const produtosContainer = document.getElementById("produtos");
-
-    produtos.forEach((produto) => {
-      const div = document.createElement("div");
-      div.classList.add("produto");
-      div.innerHTML = `
-        <img src="${produto.imagem}" alt="${produto.nome}" />
-        <h3>${produto.nome}</h3>
-        <p>${produto.descricao}</p>
-        <p><strong>R$ ${produto.preco.toFixed(2)}</strong></p>
-        <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
-      `;
-      produtosContainer.appendChild(div);
-    });
-
+    // Função para adicionar produtos ao carrinho
     function adicionarAoCarrinho(produto) {
       let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
       carrinho.push(produto);
       localStorage.setItem("carrinho", JSON.stringify(carrinho));
       alert(`${produto.nome} adicionado ao carrinho!`);
     }
+
+    // Carregar os produtos
+    const catalogoContainer = document.getElementById("catalogo");
+    produtos.forEach((produto) => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <h3>${produto.nome}</h3>
+        <p>${produto.descricao}</p>
+        <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+        <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
+      `;
+      catalogoContainer.appendChild(div);
+    });
   </script>
 </body>
 </html>
