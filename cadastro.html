@@ -34,28 +34,27 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
-    import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
-    // Configuração do Firebase
+    // Configuração real do Firebase
     const firebaseConfig = {
-      apiKey: "SUA_API_KEY",
-      authDomain: "SEU_AUTH_DOMAIN",
-      databaseURL: "SEU_DATABASE_URL",
-      projectId: "SEU_PROJECT_ID",
-      storageBucket: "SEU_STORAGE_BUCKET",
-      messagingSenderId: "SEU_MESSAGING_SENDER_ID",
-      appId: "SEU_APP_ID"
+      apiKey: "AIzaSyBgPvmrfclA8XTGtTsSCeDE390wVK46V9E",
+      authDomain: "caseirinhosne.firebaseapp.com",
+      databaseURL: "https://caseirinhosne-default-rtdb.firebaseio.com",
+      projectId: "caseirinhosne",
+      storageBucket: "caseirinhosne.firebasestorage.app",
+      messagingSenderId: "446497107875",
+      appId: "1:446497107875:web:d0c57713931048a96eb416",
+      measurementId: "G-JDZMDE7K1E"
     };
 
-    // Inicializa Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    // Captura o formulário
     const cadastroForm = document.getElementById("cadastroForm");
 
-    cadastroForm.addEventListener("submit", (e) => {
+    cadastroForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const nome = document.getElementById("cadastroNome").value;
@@ -63,25 +62,23 @@
       const senha = document.getElementById("cadastroSenha").value;
       const endereco = document.getElementById("cadastroEndereco").value;
 
-      createUserWithEmailAndPassword(auth, email, senha)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          const uid = user.uid;
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+        const uid = userCredential.user.uid;
 
-          // Salva os dados no Realtime Database
-          set(ref(db, 'clientes/' + uid), {
-            nome: nome,
-            email: email,
-            endereco: endereco
-          });
-
-          // Redireciona após o login
-          alert("Cadastro realizado com sucesso!");
-          window.location.href = "index.html";
-        })
-        .catch((error) => {
-          alert("Erro ao cadastrar: " + error.message);
+        await set(ref(db, 'clientes/' + uid), {
+          nome,
+          email,
+          endereco
         });
+
+        localStorage.setItem("usuario", JSON.stringify({ uid, nome, email }));
+        alert("Cadastro realizado com sucesso!");
+        window.location.href = "catalogo.html";
+      } catch (error) {
+        console.error("Erro:", error);
+        alert("Erro ao cadastrar: " + error.message);
+      }
     });
   </script>
 </body>
