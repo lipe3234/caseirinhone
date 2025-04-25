@@ -1,208 +1,258 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Catálogo</title>
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Firebase SDKs -->
-  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
-
   <style>
     * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to bottom right, #ffe0f0, #ffffff);
-  color: #333;
-  line-height: 1.6;
-}
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #ffe0f0, #ffffff);
+      color: #333;
+      line-height: 1.6;
+    }
 
-header {
-  background-color: #ff8fc1;
-  padding: 20px;
-  text-align: center;
-  color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+    header {
+      background-color: #ff8fc1;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
 
-header h1 {
-  font-size: 2rem;
-  animation: slideIn 0.8s ease-in-out;
-}
+    header h1 {
+      font-size: 2rem;
+      animation: slideIn 0.8s ease-in-out;
+    }
 
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 15px;
-  flex-wrap: wrap;
-}
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1rem;
-  position: relative;
-  transition: color 0.3s;
-}
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      position: relative;
+      transition: color 0.3s;
+    }
 
-nav a:hover {
-  color: #ffe9f3;
-}
+    nav a:hover {
+      color: #ffe9f3;
+    }
 
-nav a::after {
-  content: '';
-  display: block;
-  width: 0;
-  height: 2px;
-  background: white;
-  transition: width 0.3s;
-  margin: auto;
-}
+    nav a::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s;
+      margin: auto;
+    }
 
-nav a:hover::after {
-  width: 100%;
-}
+    nav a:hover::after {
+      width: 100%;
+    }
 
-.catalogo {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 30px;
-  max-width: 1200px;
-  margin: auto;
-}
+    main {
+      padding: 40px;
+      max-width: 1000px;
+      margin: auto;
+      animation: fadeIn 1s ease;
+    }
 
-.produto {
-  background-color: #fff0f7;
-  border-radius: 15px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
-}
+    h2 {
+      color: #ff5e99;
+      margin-bottom: 15px;
+      text-align: center;
+    }
 
-.produto:hover {
-  transform: scale(1.03);
-}
+    .produto-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
 
-.produto img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
+    .produto {
+      background-color: #ff8fc1;
+      padding: 20px;
+      border-radius: 10px;
+      width: 200px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 20px;
+    }
 
-.produto h3 {
-  color: #ff5e99;
-  margin-bottom: 10px;
-}
+    .produto:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
 
-.produto p {
-  margin-bottom: 10px;
-  color: #555;
-}
+    .produto img {
+      width: 100%;
+      max-height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
 
-.produto button {
-  background-color: #ff8fc1;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
+    .produto h3 {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      color: white;
+    }
 
-.produto button:hover {
-  background-color: #ff5e99;
-}
+    .produto p {
+      color: white;
+      font-size: 1rem;
+      margin: 5px 0;
+    }
 
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(-30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    .produto button {
+      background-color: white;
+      color: #ff8fc1;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
 
-@media (max-width: 768px) {
-  nav {
-    flex-direction: column;
-    gap: 10px;
-  }
+    .produto button:hover {
+      background-color: #ff5e99;
+      color: white;
+    }
 
-  .catalogo {
-    padding: 15px;
-  }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
 
-  .produto img {
-    height: 150px;
-  }
-}
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .produto-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
   </style>
 </head>
-
 <body>
   <header>
-    <h1>Catálogo de Doces</h1>
+    <h1>Caseirinhos da Ne</h1>
     <nav>
-      <a href="index.html">Início</a>
+      <a href="index.html">Home</a>
+      <a href="catalogo.html">Catálogo</a>
       <a href="carrinho.html">Carrinho</a>
-      <a href="login.html" id="linkLogin">Login</a>
-      <a href="cadastro.html" id="linkCadastro">Cadastro</a>
+      <a href="login.html">Login</a>
+      <a href="cadastro.html">Cadastro</a>
     </nav>
   </header>
 
   <main>
-    <h2>Nossos Produtos</h2>
-    <div id="catalogo" class="catalogo">
-      <!-- Os produtos serão carregados aqui dinamicamente -->
+    <h2>Catálogo de Doces</h2>
+    <div class="produto-container" id="produtos">
+      <!-- Produtos serão inseridos aqui via JS -->
     </div>
   </main>
 
-  <!-- Script principal com Firebase Auth para esconder links se logado -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+  <script>
+    const produtos = [
+      {
+        nome: "Bolo de cenoura",
+        descricao: "Bolo de cenoura assado na embalagem com cobertura de brigadeiro de chocolate",
+        preco: 2.5,
+        imagem: "d1.jpg"
+      },
+      {
+        nome: "Bolo no pote",
+        descricao: "olo no pote de chocolate e brigadeiro de chocolate Bolo pote massa baunilha, brigadeiro e mousse de chocolate branvo",
+        preco: 2.5,
+        imagem: "d2.jpg"
+      },
+      {
+        nome: "Mini bolo",
+        descricao: "Mini bolo vulcão de cenoura com cobertura de brigadeiro de chocolateB",
+        preco: 2.5,
+        imagem: "d3.jpg"
+      },
+      {
+        nome: "Pudim",
+        descricao: "Pudim de leite condensado",
+        preco: 3.0,
+        imagem: "d4.jpg"
+      }
+    ];
 
-    const firebaseConfig = {
-      apiKey: "SUA_API_KEY",
-      authDomain: "SEU_AUTH_DOMAIN",
-      projectId: "SEU_PROJECT_ID",
-      storageBucket: "SEU_STORAGE_BUCKET",
-      messagingSenderId: "SEU_MESSAGING_SENDER_ID",
-      appId: "SEU_APP_ID"
-    };
+    const produtosContainer = document.getElementById("produtos");
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    produtos.forEach((produto) => {
+      const div = document.createElement("div");
+      div.classList.add("produto");
+      div.innerHTML = 
+        <img src="${produto.imagem}" alt="${produto.nome}" />
+        <h3>${produto.nome}</h3>
+        <p>${produto.descricao}</p>
+        <p><strong>R$ ${produto.preco.toFixed(2)}</strong></p>
+        <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
+      ;
+      produtosContainer.appendChild(div);
+    });
 
-    onAuthStateChanged(auth, (user) => {
+    function adicionarAoCarrinho(produto) {
+      let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+      carrinho.push(produto);
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+      alert(${produto.nome} adicionado ao carrinho!);
+    }
+    <script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const usuarioLogado = JSON.parse(localStorage.getItem("usuario"));
+    if (usuarioLogado) {
       const linkLogin = document.getElementById("linkLogin");
       const linkCadastro = document.getElementById("linkCadastro");
+      if (linkLogin) linkLogin.style.display = "none";
+      if (linkCadastro) linkCadastro.style.display = "none";
+    }
+  });
+</script>
 
-      if (user) {
-        if (linkLogin) linkLogin.style.display = "none";
-        if (linkCadastro) linkCadastro.style.display = "none";
-      } else {
-        if (linkLogin) linkLogin.style.display = "inline";
-        if (linkCadastro) linkCadastro.style.display = "inline";
-      }
-    });
   </script>
-
-  <!-- Script separado para carregar os produtos -->
-  <script src="script.js"></script>
 </body>
 </html>
