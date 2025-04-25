@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Catálogo</title>
-  
 </head>
   <style>
     * {
@@ -196,19 +195,19 @@
     const produtos = [
       {
         nome: "Bolo de cenoura",
-        descricao: "Bolo de cenoura assado na embalagem com cobertura de brigadeiro de chocolate",
+        descricao: "Bolo de cenoura assado na embalagem com cobertura de brigadeiro de chocolate",
         preco: 2.5,
         imagem: "d1.jpg"
       },
       {
         nome: "Bolo no pote",
-        descricao: "olo no pote de chocolate e brigadeiro de chocolate Bolo pote massa baunilha, brigadeiro e mousse de chocolate branvo",
+        descricao: "Bolo no pote de chocolate e brigadeiro de chocolate. Bolo pote massa baunilha, brigadeiro e mousse de chocolate branco",
         preco: 2.5,
         imagem: "d2.jpg"
       },
       {
         nome: "Mini bolo",
-        descricao: "Mini bolo vulcão de cenoura com cobertura de brigadeiro de chocolateB",
+        descricao: "Mini bolo vulcão de cenoura com cobertura de brigadeiro de chocolate",
         preco: 2.5,
         imagem: "d3.jpg"
       },
@@ -225,13 +224,13 @@
     produtos.forEach((produto) => {
       const div = document.createElement("div");
       div.classList.add("produto");
-      div.innerHTML = 
+      div.innerHTML = `
         <img src="${produto.imagem}" alt="${produto.nome}" />
         <h3>${produto.nome}</h3>
         <p>${produto.descricao}</p>
         <p><strong>R$ ${produto.preco.toFixed(2)}</strong></p>
         <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
-      ;
+      `;
       produtosContainer.appendChild(div);
     });
 
@@ -239,11 +238,8 @@
       let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
       carrinho.push(produto);
       localStorage.setItem("carrinho", JSON.stringify(carrinho));
-      alert(${produto.nome} adicionado ao carrinho!);
+      alert(`${produto.nome} adicionado ao carrinho!`);
     }
- 
-
-
   </script>
 </body>
 </html>
