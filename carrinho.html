@@ -193,6 +193,9 @@
     const carrinhoContainer = document.getElementById("carrinho");
     let total = 0;
 
+    // Adiciona um console.log para depuração
+    console.log("Carrinho: ", carrinho);
+
     if (carrinho.length === 0) {
       carrinhoContainer.innerHTML = "<p>Seu carrinho está vazio.</p>";
       document.getElementById("total").style.display = "none"; // Oculta o total se o carrinho estiver vazio
