@@ -10,51 +10,93 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
     }
     header {
       background-color: #333;
       color: white;
-      padding: 1rem;
+      padding: 15px;
       text-align: center;
     }
-    nav a {
+    header nav a {
       color: white;
-      margin: 0 10px;
       text-decoration: none;
+      margin: 0 10px;
+      font-size: 16px;
     }
-    nav a:hover {
+    header nav a:hover {
       text-decoration: underline;
     }
     .carrinho-container {
-      margin: 20px;
-    }
-    .produto-carrinho {
-      background-color: #fff;
-      padding: 20px;
-      margin: 10px 0;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .total {
-      font-size: 1.2em;
-      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       margin-top: 20px;
     }
-    button {
-      padding: 10px 20px;
-      background-color: #FF5733;
+    .produto-carrinho {
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 10px;
+      padding: 15px;
+      width: 300px;
+      text-align: center;
+    }
+    .produto-carrinho h4 {
+      margin: 0;
+    }
+    .total {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+    .botao {
+      background-color: #28a745;
       color: white;
       border: none;
-      border-radius: 5px;
+      padding: 10px 20px;
+      margin-top: 20px;
       cursor: pointer;
+      border-radius: 5px;
     }
-    button:hover {
-      background-color: #e84e2e;
+    .botao:hover {
+      background-color: #218838;
     }
   </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+      const carrinhoContainer = document.getElementById("carrinho");
+      let total = 0;
+
+      if (carrinho.length === 0) {
+        carrinhoContainer.innerHTML = "<p>Seu carrinho está vazio.</p>";
+        document.getElementById("total").style.display = "none";
+      } else {
+        carrinho.forEach((produto) => {
+          const div = document.createElement("div");
+          div.classList.add("produto-carrinho");
+          div.innerHTML = `
+            <h4>${produto.nome}</h4>
+            <p>Descrição: ${produto.descricao}</p>
+            <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+          `;
+          carrinhoContainer.appendChild(div);
+          total += produto.preco;
+        });
+        document.getElementById("total").textContent = `Total: R$ ${total.toFixed(2)}`;
+      }
+
+      document.getElementById("finalizarPedido").addEventListener("click", function () {
+        if (carrinho.length === 0) {
+          alert("Seu carrinho está vazio!");
+        } else {
+          localStorage.removeItem("carrinho");
+          window.location.href = "pagamento.html";
+        }
+      });
+    });
+  </script>
 </head>
 <body>
   <header>
@@ -69,39 +111,5 @@
   <div id="total" class="total">Total: R$ 0.00</div>
   <button id="finalizarPedido" class="botao">Finalizar Pedido</button>
 
-  <script>
-    // Carregar carrinho e calcular total
-    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-    const carrinhoContainer = document.getElementById("carrinho");
-    let total = 0;
-
-    if (carrinho.length === 0) {
-      carrinhoContainer.innerHTML = "<p>Seu carrinho está vazio.</p>";
-      document.getElementById("total").style.display = "none";
-    } else {
-      carrinho.forEach((produto) => {
-        const div = document.createElement("div");
-        div.classList.add("produto-carrinho");
-        div.innerHTML = `
-          <h4>${produto.nome}</h4>
-          <p>Descrição: ${produto.descricao}</p>
-          <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
-        `;
-        carrinhoContainer.appendChild(div);
-        total += produto.preco;
-      });
-      document.getElementById("total").textContent = `Total: R$ ${total.toFixed(2)}`;
-    }
-
-    // Finalizar pedido
-    document.getElementById("finalizarPedido").addEventListener("click", function () {
-      if (carrinho.length === 0) {
-        alert("Seu carrinho está vazio!");
-      } else {
-        localStorage.removeItem("carrinho");
-        window.location.href = "pagamento.html";
-      }
-    });
-  </script>
 </body>
 </html>
