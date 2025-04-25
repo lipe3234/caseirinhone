@@ -2,9 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Catálogo</title>
-  
-</head>
+  <title>Carrinho</title>
   <style>
     * {
       margin: 0;
@@ -70,180 +68,155 @@
       width: 100%;
     }
 
-    main {
-      padding: 40px;
-      max-width: 1000px;
-      margin: auto;
-      animation: fadeIn 1s ease;
-    }
-
     h2 {
       color: #ff5e99;
-      margin-bottom: 15px;
+      margin: 30px auto 20px;
       text-align: center;
     }
 
-    .produto-container {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-top: 30px;
-    }
-
-    .produto {
-      background-color: #ff8fc1;
-      padding: 20px;
-      border-radius: 10px;
-      width: 200px;
-      text-align: center;
+    #carrinho {
+      background-color: #fff0f7;
+      padding: 30px;
+      border-radius: 15px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin: 40px auto;
+      max-width: 800px;
+    }
+
+    #carrinho div {
+      background: #ffffff;
+      padding: 20px;
       margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease;
     }
 
-    .produto:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    #carrinho div:hover {
+      transform: scale(1.02);
     }
 
-    .produto img {
-      width: 100%;
-      max-height: 150px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-
-    .produto h3 {
+    #carrinho h4 {
+      color: #ff5e99;
       font-size: 1.2rem;
-      margin-top: 10px;
-      color: white;
+      margin-bottom: 8px;
     }
 
-    .produto p {
-      color: white;
+    #carrinho p {
       font-size: 1rem;
-      margin: 5px 0;
+      color: #444;
     }
 
-    .produto button {
-      background-color: white;
-      color: #ff8fc1;
+    #carrinho button {
+      background-color: #ff8fc1;
+      color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 25px;
-      font-size: 1rem;
-      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
       margin-top: 10px;
+      cursor: pointer;
       transition: background 0.3s ease;
     }
 
-    .produto button:hover {
+    #carrinho button:hover {
       background-color: #ff5e99;
-      color: white;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
+    #carrinho h3 {
+      text-align: right;
+      margin-top: 20px;
+      color: #e84393;
+    }
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    #finalizarPedido {
+      background-color: #e84393;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 1rem;
+      margin: 30px auto 50px;
+      display: block;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #finalizarPedido:hover {
+      background-color: #d63384;
     }
 
     @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 768px) {
-      .produto-container {
+      nav {
         flex-direction: column;
-        align-items: center;
+        gap: 10px;
       }
+
+      #carrinho {
+        padding: 20px;
+        margin: 20px;
+      }
+
+      #finalizarPedido {
+        width: 100%;
+      }
+      a{
+        decoration: none;
     }
   </style>
+</head>
+
 <body>
   <header>
     <h1>Caseirinhos da Ne</h1>
     <nav>
       <a href="index.html">Home</a>
+      <a href="catalogo.html">Catálogo</a>
       <a href="carrinho.html">Carrinho</a>
       <a href="login.html">Login</a>
       <a href="cadastro.html">Cadastro</a>
     </nav>
   </header>
 
-  <main>
-    <h2>Catálogo de Doces</h2>
-    <div class="produto-container" id="produtos">
-      <!-- Produtos serão inseridos aqui via JS -->
-    </div>
-  </main>
+  <h2>Seu Carrinho</h2>
+  <div id="carrinho">
+    <!-- Itens do carrinho vão aparecer aqui -->
+  </div>
+  <button id="finalizarPedido">Finalizar Pedido</button>
 
   <script>
-    const produtos = [
-      {
-        nome: "Bolo de cenoura",
-        descricao: "Bolo de cenoura assado na embalagem com cobertura de brigadeiro de chocolate",
-        preco: 2.5,
-        imagem: "d1.jpg"
-      },
-      {
-        nome: "Bolo no pote",
-        descricao: "olo no pote de chocolate e brigadeiro de chocolate Bolo pote massa baunilha, brigadeiro e mousse de chocolate branvo",
-        preco: 2.5,
-        imagem: "d2.jpg"
-      },
-      {
-        nome: "Mini bolo",
-        descricao: "Mini bolo vulcão de cenoura com cobertura de brigadeiro de chocolateB",
-        preco: 2.5,
-        imagem: "d3.jpg"
-      },
-      {
-        nome: "Pudim",
-        descricao: "Pudim de leite condensado",
-        preco: 3.0,
-        imagem: "d4.jpg"
-      }
-    ];
+    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+    const carrinhoContainer = document.getElementById("carrinho");
 
-    const produtosContainer = document.getElementById("produtos");
-
-    produtos.forEach((produto) => {
-      const div = document.createElement("div");
-      div.classList.add("produto");
-      div.innerHTML = 
-        <img src="${produto.imagem}" alt="${produto.nome}" />
-        <h3>${produto.nome}</h3>
-        <p>${produto.descricao}</p>
-        <p><strong>R$ ${produto.preco.toFixed(2)}</strong></p>
-        <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
-      ;
-      produtosContainer.appendChild(div);
-    });
-
-    function adicionarAoCarrinho(produto) {
-      let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-      carrinho.push(produto);
-      localStorage.setItem("carrinho", JSON.stringify(carrinho));
-      alert(${produto.nome} adicionado ao carrinho!);
+    // Exibe os produtos do carrinho
+    if (carrinho.length === 0) {
+      carrinhoContainer.innerHTML = "<p>Seu carrinho está vazio.</p>";
+    } else {
+      carrinho.forEach((produto) => {
+        const div = document.createElement("div");
+        div.innerHTML = 
+          <h4>${produto.nome}</h4>
+          <p>Descrição: ${produto.descricao}</p>
+          <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+        ;
+        carrinhoContainer.appendChild(div);
+      });
     }
- 
 
-
+    // Função para finalizar o pedido
+    document.getElementById("finalizarPedido").addEventListener("click", function () {
+      if (carrinho.length === 0) {
+        alert("Seu carrinho está vazio!");
+      } else {
+        // Simulando redirecionamento para uma página de pagamento
+        window.location.href = "pagamento.html";
+      }
+    });
   </script>
 </body>
 </html>
