@@ -1,18 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catálogo</title>
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
-  <style>
-    <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Pagamento</title>
+  <title>Catálogo</title>
+</head>
   <style>
     * {
       margin: 0;
@@ -91,40 +82,64 @@
       text-align: center;
     }
 
-    #resumoPedido {
+    .produto-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .produto {
       background-color: #ff8fc1;
       padding: 20px;
       border-radius: 10px;
+      width: 200px;
+      text-align: center;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       margin-bottom: 20px;
     }
 
-    #resumoPedido h3 {
-      color: white;
-      font-size: 1.5rem;
-      margin-bottom: 10px;
+    .produto:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
 
-    #resumoPedido p {
+    .produto img {
+      width: 100%;
+      max-height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .produto h3 {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      color: white;
+    }
+
+    .produto p {
       color: white;
       font-size: 1rem;
+      margin: 5px 0;
     }
 
-    #confirmarPagamento {
-      background-color: #e84393;
-      color: white;
+    .produto button {
+      background-color: white;
+      color: #ff8fc1;
       border: none;
-      padding: 12px 24px;
+      padding: 10px 20px;
       border-radius: 25px;
       font-size: 1rem;
-      margin: 30px auto 50px;
-      display: block;
       cursor: pointer;
+      margin-top: 10px;
       transition: background 0.3s ease;
     }
 
-    #confirmarPagamento:hover {
-      background-color: #d63384;
+    .produto button:hover {
+      background-color: #ff5e99;
+      color: white;
     }
 
     @keyframes fadeIn {
@@ -139,19 +154,30 @@
       }
     }
 
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     @media (max-width: 768px) {
-      main {
-        padding: 20px;
+      .produto-container {
+        flex-direction: column;
+        align-items: center;
       }
     }
   </style>
-</head>
 <body>
   <header>
     <h1>Caseirinhos da Ne</h1>
     <nav>
       <a href="index.html">Home</a>
-      <a href="catalogo.html">Catálogo</a>
       <a href="carrinho.html">Carrinho</a>
       <a href="login.html">Login</a>
       <a href="cadastro.html">Cadastro</a>
@@ -159,64 +185,54 @@
   </header>
 
   <main>
-    <h2>Resumo do Pedido</h2>
-    <div id="resumoPedido">
-      <!-- Resumo do pedido será preenchido aqui -->
+    <h2>Catálogo de Doces</h2>
+    <div class="produto-container" id="produtos">
+      <!-- Produtos serão inseridos aqui via JS -->
     </div>
-    <button id="confirmarPagamento">Confirmar Pagamento</button>
   </main>
 
   <script>
-    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-    console.log("Carrinho no pagamento:", carrinho); // Verificação do conteúdo do carrinho
-
-    const resumoPedido = document.getElementById("resumoPedido");
-
-    let total = 0;
-
-    if (carrinho.length === 0) {
-      resumoPedido.innerHTML = "<p>Seu carrinho está vazio.</p>";
-    } else {
-      carrinho.forEach((produto) => {
-        total += produto.preco;
-        const produtoDiv = document.createElement("div");
-        produtoDiv.innerHTML = `  
-          <h3>${produto.nome}</h3>
-          <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
-        `;
-        resumoPedido.appendChild(produtoDiv);
-      });
-
-      const totalDiv = document.createElement("div");
-      totalDiv.innerHTML = `<h3>Total: R$ ${total.toFixed(2)}</h3>`;
-      resumoPedido.appendChild(totalDiv);
-    }
-
-    document.getElementById("confirmarPagamento").addEventListener("click", () => {
-      if (carrinho.length === 0) {
-        alert("Seu carrinho está vazio!");
-      } else {
-        alert("Pagamento confirmado! Agradecemos pela sua compra.");
-        localStorage.removeItem("carrinho"); // limpa o carrinho
-        window.location.href = "index.html"; // redireciona para home
+    const produtos = [
+      {
+        nome: "Bolo de cenoura",
+        descricao: "Bolo de cenoura assado na embalagem com cobertura de brigadeiro de chocolate",
+        preco: 2.5,
+        imagem: "d1.jpg"
+      },
+      {
+        nome: "Bolo no pote",
+        descricao: "Bolo no pote de chocolate e brigadeiro de chocolate. Bolo pote massa baunilha, brigadeiro e mousse de chocolate branco",
+        preco: 2.5,
+        imagem: "d2.jpg"
+      },
+      {
+        nome: "Mini bolo",
+        descricao: "Mini bolo vulcão de cenoura com cobertura de brigadeiro de chocolate",
+        preco: 2.5,
+        imagem: "d3.jpg"
+      },
+      {
+        nome: "Pudim",
+        descricao: "Pudim de leite condensado",
+        preco: 3.0,
+        imagem: "d4.jpg"
       }
-    });
-  </script>
-</body>
-</html>
+    ];
 
-  </style>
-  <script>
-    const firebaseConfig = {
-      apiKey: "your-api-key",
-      authDomain: "your-auth-domain",
-      databaseURL: "your-database-url",
-      projectId: "your-project-id",
-      storageBucket: "your-storage-bucket",
-      messagingSenderId: "your-sender-id",
-      appId: "your-app-id"
-    };
-    firebase.initializeApp(firebaseConfig);
+    const produtosContainer = document.getElementById("produtos");
+
+    produtos.forEach((produto) => {
+      const div = document.createElement("div");
+      div.classList.add("produto");
+      div.innerHTML = `
+        <img src="${produto.imagem}" alt="${produto.nome}" />
+        <h3>${produto.nome}</h3>
+        <p>${produto.descricao}</p>
+        <p><strong>R$ ${produto.preco.toFixed(2)}</strong></p>
+        <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
+      `;
+      produtosContainer.appendChild(div);
+    });
 
     function adicionarAoCarrinho(produto) {
       let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
@@ -224,48 +240,6 @@
       localStorage.setItem("carrinho", JSON.stringify(carrinho));
       alert(`${produto.nome} adicionado ao carrinho!`);
     }
-
-    const produtos = [
-      { nome: "Bolo de Chocolate", descricao: "Delicioso bolo de chocolate", preco: 25.00 },
-      { nome: "Doce de Leite", descricao: "Doce de leite caseiro", preco: 15.00 },
-    ];
-
-    document.addEventListener("DOMContentLoaded", function () {
-      const catalogoContainer = document.getElementById("catalogo");
-      produtos.forEach((produto) => {
-        const div = document.createElement("div");
-        div.classList.add("produto-card");
-        div.innerHTML = `
-          <img src="product-placeholder.jpg" alt="Produto">
-          <h3>${produto.nome}</h3>
-          <p>${produto.descricao}</p>
-          <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
-          <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
-        `;
-        catalogoContainer.appendChild(div);
-      });
-
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          document.getElementById("linkLogin").style.display = "none";
-          document.getElementById("linkCadastro").style.display = "none";
-        } else {
-          document.getElementById("linkLogin").style.display = "block";
-          document.getElementById("linkCadastro").style.display = "block";
-        }
-      });
-    });
   </script>
-</head>
-<body>
-  <header>
-    <nav>
-      <a href="index.html" id="linkLogin">Login</a>
-      <a href="cadastro.html" id="linkCadastro">Cadastro</a>
-    </nav>
-  </header>
-
-  <div id="catalogo" class="catalogo-container"></div>
-
 </body>
 </html>
