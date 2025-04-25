@@ -1,110 +1,196 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pagamento</title>
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #ffe0f0, #ffffff);
+      color: #333;
+      line-height: 1.6;
+    }
+
     header {
-      background-color: #333;
-      color: white;
-      padding: 15px;
+      background-color: #ff8fc1;
+      padding: 20px;
       text-align: center;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
-    header nav a {
+
+    header h1 {
+      font-size: 2rem;
+      animation: slideIn 0.8s ease-in-out;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
       color: white;
       text-decoration: none;
-      margin: 0 10px;
-      font-size: 16px;
+      font-weight: bold;
+      font-size: 1rem;
+      position: relative;
+      transition: color 0.3s;
     }
-    header nav a:hover {
-      text-decoration: underline;
+
+    nav a:hover {
+      color: #ffe9f3;
     }
-    .resumo-pedido {
-      margin: 20px;
+
+    nav a::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s;
+      margin: auto;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    main {
+      padding: 40px;
+      max-width: 1000px;
+      margin: auto;
+      animation: fadeIn 1s ease;
+    }
+
+    h2 {
+      color: #ff5e99;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    #resumoPedido {
+      background-color: #ff8fc1;
       padding: 20px;
-      background-color: white;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
     }
-    .produto-resumo {
+
+    #resumoPedido h3 {
+      color: white;
+      font-size: 1.5rem;
       margin-bottom: 10px;
     }
-    .total-resumo {
-      margin-top: 20px;
-      font-size: 20px;
-      font-weight: bold;
+
+    #resumoPedido p {
+      color: white;
+      font-size: 1rem;
     }
-    .botao {
-      background-color: #28a745;
+
+    #confirmarPagamento {
+      background-color: #e84393;
       color: white;
       border: none;
-      padding: 10px 20px;
-      margin-top: 20px;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 1rem;
+      margin: 30px auto 50px;
+      display: block;
       cursor: pointer;
-      border-radius: 5px;
+      transition: background 0.3s ease;
     }
-    .botao:hover {
-      background-color: #218838;
+
+    #confirmarPagamento:hover {
+      background-color: #d63384;
     }
-  </style>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-      const resumoPedido = document.getElementById("resumoPedido");
-      let total = 0;
 
-      if (carrinho.length === 0) {
-        resumoPedido.innerHTML = "<p>Seu carrinho está vazio.</p>";
-      } else {
-        carrinho.forEach((produto) => {
-          total += produto.preco;
-          const produtoDiv = document.createElement("div");
-          produtoDiv.classList.add("produto-resumo");
-          produtoDiv.innerHTML = `
-            <h3>${produto.nome}</h3>
-            <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
-          `;
-          resumoPedido.appendChild(produtoDiv);
-        });
-
-        const totalDiv = document.createElement("div");
-        totalDiv.classList.add("total-resumo");
-        totalDiv.innerHTML = `<h3>Total: R$ ${total.toFixed(2)}</h3>`;
-        resumoPedido.appendChild(totalDiv);
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
       }
 
-      document.getElementById("confirmarPagamento").addEventListener("click", () => {
-        if (carrinho.length === 0) {
-          alert("Seu carrinho está vazio!");
-        } else {
-          alert("Pagamento confirmado! Agradecemos pela sua compra.");
-          localStorage.removeItem("carrinho");
-          window.location.href = "index.html";
-        }
-      });
-    });
-  </script>
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
+    <h1>Caseirinhos da Ne</h1>
     <nav>
-      <a href="index.html" id="linkLogin">Login</a>
-      <a href="cadastro.html" id="linkCadastro">Cadastro</a>
+      <a href="index.html">Home</a>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="carrinho.html">Carrinho</a>
+      <a href="login.html">Login</a>
+      <a href="cadastro.html">Cadastro</a>
     </nav>
   </header>
 
-  <h2>Resumo do Pedido</h2>
-  <div id="resumoPedido" class="resumo-pedido"></div>
-  <button id="confirmarPagamento" class="botao">Confirmar Pagamento</button>
+  <main>
+    <h2>Resumo do Pedido</h2>
+    <div id="resumoPedido">
+      <!-- Resumo do pedido será preenchido aqui -->
+    </div>
+    <button id="confirmarPagamento">Confirmar Pagamento</button>
+  </main>
 
+  <script>
+    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+    console.log("Carrinho no pagamento:", carrinho); // Verificação do conteúdo do carrinho
+
+    const resumoPedido = document.getElementById("resumoPedido");
+
+    let total = 0;
+
+    if (carrinho.length === 0) {
+      resumoPedido.innerHTML = "<p>Seu carrinho está vazio.</p>";
+    } else {
+      carrinho.forEach((produto) => {
+        total += produto.preco;
+        const produtoDiv = document.createElement("div");
+        produtoDiv.innerHTML = `  
+          <h3>${produto.nome}</h3>
+          <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+        `;
+        resumoPedido.appendChild(produtoDiv);
+      });
+
+      const totalDiv = document.createElement("div");
+      totalDiv.innerHTML = `<h3>Total: R$ ${total.toFixed(2)}</h3>`;
+      resumoPedido.appendChild(totalDiv);
+    }
+
+    document.getElementById("confirmarPagamento").addEventListener("click", () => {
+      if (carrinho.length === 0) {
+        alert("Seu carrinho está vazio!");
+      } else {
+        alert("Pagamento confirmado! Agradecemos pela sua compra.");
+        localStorage.removeItem("carrinho"); // limpa o carrinho
+        window.location.href = "index.html"; // redireciona para home
+      }
+    });
+  </script>
 </body>
 </html>
