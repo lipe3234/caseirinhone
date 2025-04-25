@@ -195,6 +195,7 @@
 
     if (carrinho.length === 0) {
       carrinhoContainer.innerHTML = "<p>Seu carrinho está vazio.</p>";
+      document.getElementById("total").style.display = "none"; // Oculta o total se o carrinho estiver vazio
     } else {
       carrinho.forEach((produto) => {
         const div = document.createElement("div");
@@ -206,9 +207,8 @@
         carrinhoContainer.appendChild(div);
         total += produto.preco;
       });
+      document.getElementById("total").textContent = `Total: R$ ${total.toFixed(2)}`;
     }
-
-    document.getElementById("total").textContent = `Total: R$ ${total.toFixed(2)}`;
 
     document.getElementById("finalizarPedido").addEventListener("click", function () {
       if (carrinho.length === 0) {
