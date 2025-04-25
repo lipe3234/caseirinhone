@@ -10,64 +10,59 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
     }
     header {
       background-color: #333;
       color: white;
-      padding: 1rem;
+      padding: 15px;
       text-align: center;
     }
-    nav a {
+    header nav a {
       color: white;
-      margin: 0 10px;
       text-decoration: none;
+      margin: 0 10px;
+      font-size: 16px;
     }
-    nav a:hover {
+    header nav a:hover {
       text-decoration: underline;
     }
     .catalogo-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
       margin: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
     }
     .produto-card {
-      background-color: #fff;
-      padding: 20px;
-      margin: 10px 0;
-      border-radius: 5px;
+      background-color: white;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 10px;
+      padding: 15px;
+      width: 200px;
+      text-align: center;
     }
-    button {
-      padding: 10px 20px;
-      background-color: #4CAF50;
+    .produto-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+    .produto-card button {
+      background-color: #28a745;
       color: white;
       border: none;
-      border-radius: 5px;
+      padding: 10px;
+      width: 100%;
       cursor: pointer;
+      margin-top: 10px;
+      border-radius: 5px;
     }
-    button:hover {
-      background-color: #45a049;
+    .produto-card button:hover {
+      background-color: #218838;
     }
   </style>
-</head>
-<body>
-  <header>
-    <nav>
-      <a href="index.html" id="linkLogin">Login</a>
-      <a href="cadastro.html" id="linkCadastro">Cadastro</a>
-    </nav>
-  </header>
-
-  <div id="catalogo" class="catalogo-container">
-    <!-- Produtos serão carregados aqui -->
-  </div>
-
   <script>
-    // Inicializando Firebase
     const firebaseConfig = {
       apiKey: "your-api-key",
       authDomain: "your-auth-domain",
@@ -79,14 +74,6 @@
     };
     firebase.initializeApp(firebaseConfig);
 
-    // Exemplo de produtos, você pode buscar do Firebase ou adicionar manualmente
-    const produtos = [
-      { nome: "Bolo de Chocolate", descricao: "Delicioso bolo de chocolate", preco: 25.00 },
-      { nome: "Doce de Leite", descricao: "Doce de leite caseiro", preco: 15.00 },
-      // adicione mais produtos conforme necessário
-    ];
-
-    // Função para adicionar produtos ao carrinho
     function adicionarAoCarrinho(produto) {
       let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
       carrinho.push(produto);
@@ -94,30 +81,47 @@
       alert(`${produto.nome} adicionado ao carrinho!`);
     }
 
-    // Carregar os produtos
-    const catalogoContainer = document.getElementById("catalogo");
-    produtos.forEach((produto) => {
-      const div = document.createElement("div");
-      div.classList.add("produto-card");
-      div.innerHTML = `
-        <h3>${produto.nome}</h3>
-        <p>${produto.descricao}</p>
-        <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
-        <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
-      `;
-      catalogoContainer.appendChild(div);
-    });
+    const produtos = [
+      { nome: "Bolo de Chocolate", descricao: "Delicioso bolo de chocolate", preco: 25.00 },
+      { nome: "Doce de Leite", descricao: "Doce de leite caseiro", preco: 15.00 },
+    ];
 
-    // Controlando a visibilidade dos links com base na autenticação
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        document.getElementById("linkLogin").style.display = "none";
-        document.getElementById("linkCadastro").style.display = "none";
-      } else {
-        document.getElementById("linkLogin").style.display = "block";
-        document.getElementById("linkCadastro").style.display = "block";
-      }
+    document.addEventListener("DOMContentLoaded", function () {
+      const catalogoContainer = document.getElementById("catalogo");
+      produtos.forEach((produto) => {
+        const div = document.createElement("div");
+        div.classList.add("produto-card");
+        div.innerHTML = `
+          <img src="product-placeholder.jpg" alt="Produto">
+          <h3>${produto.nome}</h3>
+          <p>${produto.descricao}</p>
+          <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+          <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
+        `;
+        catalogoContainer.appendChild(div);
+      });
+
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          document.getElementById("linkLogin").style.display = "none";
+          document.getElementById("linkCadastro").style.display = "none";
+        } else {
+          document.getElementById("linkLogin").style.display = "block";
+          document.getElementById("linkCadastro").style.display = "block";
+        }
+      });
     });
   </script>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" id="linkLogin">Login</a>
+      <a href="cadastro.html" id="linkCadastro">Cadastro</a>
+    </nav>
+  </header>
+
+  <div id="catalogo" class="catalogo-container"></div>
+
 </body>
 </html>
