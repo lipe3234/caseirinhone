@@ -5,108 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Loja de Doces</title>
   <link rel="stylesheet" href="style.css">
+
   <!-- Firebase SDKs -->
   <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fff0f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #ff8fc1;
+      padding: 20px;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      position: relative;
+      padding: 5px 10px;
+      transition: all 0.3s ease;
+    }
+
+    nav a::after {
+      content: "";
+      height: 2px;
+      background: white;
+      width: 0;
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      transition: 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    main {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: #e91e63;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      background-color: #ffe4ec;
+      padding: 15px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+    a, button {
+      transition: all 0.3s ease-in-out;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+  </style>
 </head>
-<style>
-  /* Reset básico */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
 
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #fff0f5;
-    color: #333;
-    line-height: 1.6;
-  }
-
-  header {
-    background-color: #ff8fc1;
-    padding: 20px;
-    color: white;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-
-  header h1 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 10px;
-  }
-
-  nav {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-  }
-
-  nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-    position: relative;
-    padding: 5px 10px;
-    transition: all 0.3s ease;
-  }
-
-  nav a::after {
-    content: "";
-    height: 2px;
-    background: white;
-    width: 0;
-    position: absolute;
-    left: 0;
-    bottom: -5px;
-    transition: 0.3s ease;
-  }
-
-  nav a:hover::after {
-    width: 100%;
-  }
-
-  main {
-    padding: 40px 20px;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-
-  h2 {
-    font-size: 1.8rem;
-    color: #e91e63;
-    margin-bottom: 10px;
-  }
-
-  p {
-    font-size: 1rem;
-    color: #444;
-    margin-bottom: 20px;
-  }
-
-  footer {
-    background-color: #ffe4ec;
-    padding: 15px;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #333;
-  }
-
-  a, button {
-    transition: all 0.3s ease-in-out;
-  }
-
-  button:hover {
-    transform: scale(1.05);
-  }
-</style>
 <body>
   <header>
     <h1>Caseirinhos da Ne</h1>
@@ -123,16 +126,18 @@
       <h2>Bem-vindo à nossa loja!</h2>
       <p>Somos uma loja que vende doces caseiros maravilhosos, com uma variedade de opções para todos os gostos. Desde balas e chocolates até bolos e tortas, temos tudo o que você precisa para satisfazer seu desejo por doces!</p>
       <p>Explore nosso catálogo e descubra nossas delícias. Temos certeza de que você encontrará algo que vai adorar!</p>
+
       <h2>Entre em contato conosco!</h2>
       <a href="https://www.instagram.com/caseirinhos.ne/">Nosso Instagram: @caseirinhos.ne</a>
     </section>
   </main>
 
-  <!-- Verificação de autenticação do usuário -->
+  <!-- Script Firebase: autenticação e exibição condicional dos links -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
+    // Configuração do Firebase (substitua pelos seus dados reais)
     const firebaseConfig = {
       apiKey: "SUA_API_KEY",
       authDomain: "SEU_AUTH_DOMAIN",
@@ -142,9 +147,11 @@
       appId: "SEU_APP_ID"
     };
 
+    // Inicialização do Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    // Observa o estado de autenticação
     onAuthStateChanged(auth, (user) => {
       const linkLogin = document.getElementById("linkLogin");
       const linkCadastro = document.getElementById("linkCadastro");
@@ -154,7 +161,7 @@
         if (linkLogin) linkLogin.style.display = "none";
         if (linkCadastro) linkCadastro.style.display = "none";
       } else {
-        // Usuário deslogado → mantém visíveis
+        // Usuário deslogado → mostra os links
         if (linkLogin) linkLogin.style.display = "inline";
         if (linkCadastro) linkCadastro.style.display = "inline";
       }
