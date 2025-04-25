@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carrinho</title>
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
- <style>
+  <style>
     * {
       margin: 0;
       padding: 0;
@@ -171,53 +167,80 @@
       }
     }
   </style>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-      const carrinhoContainer = document.getElementById("carrinho");
-      let total = 0;
-
-      if (carrinho.length === 0) {
-        carrinhoContainer.innerHTML = "<p>Seu carrinho está vazio.</p>";
-        document.getElementById("total").style.display = "none";
-      } else {
-        carrinho.forEach((produto) => {
-          const div = document.createElement("div");
-          div.classList.add("produto-carrinho");
-          div.innerHTML = `
-            <h4>${produto.nome}</h4>
-            <p>Descrição: ${produto.descricao}</p>
-            <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
-          `;
-          carrinhoContainer.appendChild(div);
-          total += produto.preco;
-        });
-        document.getElementById("total").textContent = `Total: R$ ${total.toFixed(2)}`;
-      }
-
-      document.getElementById("finalizarPedido").addEventListener("click", function () {
-        if (carrinho.length === 0) {
-          alert("Seu carrinho está vazio!");
-        } else {
-          localStorage.removeItem("carrinho");
-          window.location.href = "pagamento.html";
-        }
-      });
-    });
-  </script>
 </head>
+
 <body>
   <header>
-    <nav>
-      <a href="index.html" id="linkLogin">Login</a>
+    <h1>Caseirinhos da Ne</h1>
+    <nav id="navbar">
+      <a href="index.html">Home</a>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="carrinho.html">Carrinho</a>
+      <a href="login.html" id="linkLogin">Login</a>
       <a href="cadastro.html" id="linkCadastro">Cadastro</a>
     </nav>
   </header>
 
   <h2>Seu Carrinho</h2>
-  <div id="carrinho" class="carrinho-container"></div>
-  <div id="total" class="total">Total: R$ 0.00</div>
-  <button id="finalizarPedido" class="botao">Finalizar Pedido</button>
+  <div id="carrinho">
+    <!-- Itens do carrinho vão aparecer aqui -->
+  </div>
+  <h3 id="total"></h3>
+  <button id="finalizarPedido">Finalizar Pedido</button>
 
+  <script>
+    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+    const carrinhoContainer = document.getElementById("carrinho");
+    let total = 0;
+
+    if (carrinho.length === 0) {
+      carrinhoContainer.innerHTML = "<p>Seu carrinho está vazio.</p>";
+    } else {
+      carrinho.forEach((produto) => {
+        const div = document.createElement("div");
+        div.innerHTML = 
+          <h4>${produto.nome}</h4>
+          <p>Descrição: ${produto.descricao}</p>
+          <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+        ;
+        carrinhoContainer.appendChild(div);
+        total += produto.preco;
+      });
+    }
+
+    document.getElementById("total").textContent = Total: R$ ${total.toFixed(2)};
+
+    document.getElementById("finalizarPedido").addEventListener("click", function () {
+      if (carrinho.length === 0) {
+        alert("Seu carrinho está vazio!");
+      } else {
+        localStorage.removeItem("carrinho");
+        window.location.href = "pagamento.html";
+      }
+    });
+
+    // Esconde links de login/cadastro se usuário estiver logado
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        document.getElementById("linkLogin").style.display = "none";
+        document.getElementById("linkCadastro").style.display = "none";
+      }
+    });
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBgPvmrfclA8XTGtTsSCeDE390wVK46V9E",
+      authDomain: "caseirinhosne.firebaseapp.com",
+      databaseURL: "https://caseirinhosne-default-rtdb.firebaseio.com",
+      projectId: "caseirinhosne",
+      storageBucket: "caseirinhosne.firebasestorage.app",
+      messagingSenderId: "446497107875",
+      appId: "1:446497107875:web:d0c57713931048a96eb416",
+      measurementId: "G-JDZMDE7K1E"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 </body>
 </html>
