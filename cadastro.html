@@ -5,38 +5,13 @@
   <title>Cadastro</title>
   <link rel="stylesheet" href="style.css">
   <!-- Firebase SDKs -->
-  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
-  <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
-</head>
-<body>
-  <header>
-    <h1>Caseirinhos da Ne</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="catalogo.html">Catálogo</a>
-      <a href="carrinho.html">Carrinho</a>
-      <a href="login.html">Login</a>
-    </nav>
-  </header>
-
-  <main style="text-align:center">
-    <h2>Cadastro</h2>
-    <form id="cadastroForm">
-      <input type="text" id="cadastroNome" placeholder="Nome" required><br>
-      <input type="email" id="cadastroEmail" placeholder="Email" required><br>
-      <input type="password" id="cadastroSenha" placeholder="Senha" required><br>
-      <input type="text" id="cadastroEndereco" placeholder="Endereço" required><br>
-      <button type="submit">Cadastrar</button>
-    </form>
-  </main>
-
   <script type="module">
+    // MÓDULO PRINCIPAL
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
-    // Configuração real do Firebase
+    // CONFIGURAÇÃO DO FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyBgPvmrfclA8XTGtTsSCeDE390wVK46V9E",
       authDomain: "caseirinhosne.firebaseapp.com",
@@ -52,32 +27,73 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    const cadastroForm = document.getElementById("cadastroForm");
+    // CADASTRO
+    window.addEventListener("DOMContentLoaded", () => {
+      const cadastroForm = document.getElementById("cadastroForm");
 
-    cadastroForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+      cadastroForm.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-      const nome = document.getElementById("cadastroNome").value;
-      const email = document.getElementById("cadastroEmail").value;
-      const senha = document.getElementById("cadastroSenha").value;
-      const endereco = document.getElementById("cadastroEndereco").value;
+        const nome = document.getElementById("cadastroNome").value;
+        const email = document.getElementById("cadastroEmail").value;
+        const senha = document.getElementById("cadastroSenha").value;
+        const endereco = document.getElementById("cadastroEndereco").value;
 
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
-        const uid = userCredential.user.uid;
+        createUserWithEmailAndPassword(auth, email, senha)
+          .then((userCredential) => {
+            const user = userCredential.user;
 
-        await set(ref(db, 'clientes/' + uid), {
-          nome,
-          email,
-          endereco
-        });
+            // Salvar dados no Realtime Database
+            return set(ref(db, 'clientes/' + user.uid), {
+              nome: nome,
+              email: email,
+              endereco: endereco
+            }).then(() => user); // retorna o usuário para o próximo .then
+          })
+          .then((user) => {
+            // Armazena dados localmente
+            localStorage.setItem("usuario", JSON.stringify({ uid: user.uid, email: user.email }));
+            alert("Cadastro realizado com sucesso!");
+            window.location.href = "index.html";
+          })
+          .catch((error) => {
+            alert("Erro ao cadastrar: " + error.message);
+            console.error(error);
+          });
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>Caseirinhos da Ne</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="carrinho.html">Carrinho</a>
+      <a href="login.html" id="linkLogin">Login</a>
+      <a href="cadastro.html" id="linkCadastro">Cadastro</a>
+    </nav>
+  </header>
 
-        localStorage.setItem("usuario", JSON.stringify({ uid, nome, email }));
-        alert("Cadastro realizado com sucesso!");
-        window.location.href = "catalogo.html";
-      } catch (error) {
-        console.error("Erro:", error);
-        alert("Erro ao cadastrar: " + error.message);
+  <main style="text-align:center">
+    <h2>Cadastro</h2>
+    <form id="cadastroForm">
+      <input type="text" id="cadastroNome" placeholder="Nome" required><br>
+      <input type="email" id="cadastroEmail" placeholder="Email" required><br>
+      <input type="password" id="cadastroSenha" placeholder="Senha" required><br>
+      <input type="text" id="cadastroEndereco" placeholder="Endereço" required><br>
+      <button type="submit">Cadastrar</button>
+    </form>
+  </main>
+
+  <!-- Esconde "login" e "cadastro" do menu se já estiver logado -->
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const usuarioLogado = JSON.parse(localStorage.getItem("usuario"));
+      if (usuarioLogado) {
+        document.getElementById("linkLogin").style.display = "none";
+        document.getElementById("linkCadastro").style.display = "none";
       }
     });
   </script>
