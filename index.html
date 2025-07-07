@@ -1,146 +1,162 @@
-<!-- Atualizado com as correções solicitadas -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loja de Doces</title>
+  <link rel="stylesheet" href="style.css">
 
-<!-- index.html -->
-<!-- (sem alteração estrutural, apenas script corrigido para esconder links se logado) -->
-<!-- Adicione ao final do <body> do index.html -->
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (usuario) {
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fff0f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #ff8fc1;
+      padding: 20px;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      position: relative;
+      padding: 5px 10px;
+      transition: all 0.3s ease;
+    }
+
+    nav a::after {
+      content: "";
+      height: 2px;
+      background: white;
+      width: 0;
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      transition: 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    main {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: #e91e63;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      background-color: #ffe4ec;
+      padding: 15px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+    a, button {
+      transition: all 0.3s ease-in-out;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Caseirinhos da Ne</h1>
+    <nav>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="carrinho.html">Carrinho</a>
+      <a href="login.html" id="linkLogin">Login</a>
+      <a href="cadastro.html" id="linkCadastro">Cadastro</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Bem-vindo à nossa loja!</h2>
+      <p>Somos uma loja que vende doces caseiros maravilhosos, com uma variedade de opções para todos os gostos. Desde balas e chocolates até bolos e tortas, temos tudo o que você precisa para satisfazer seu desejo por doces!</p>
+      <p>Explore nosso catálogo e descubra nossas delícias. Temos certeza de que você encontrará algo que vai adorar!</p>
+
+      <h2>Entre em contato conosco!</h2>
+      <a href="https://www.instagram.com/caseirinhos.ne/">Nosso Instagram: @caseirinhos.ne</a>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBgPvmrfclA8XTGtTsSCeDE390wVK46V9E",
+      authDomain: "caseirinhosne.firebaseapp.com",
+      projectId: "caseirinhosne",
+      storageBucket: "caseirinhosne.firebasestorage.app",
+      messagingSenderId: "446497107875",
+      appId: "1:446497107875:web:d0c57713931048a96eb416",
+      measurementId: "G-JDZMDE7K1E",
+      databaseURL: "https://caseirinhosne-default-rtdb.firebaseio.com"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
       const linkLogin = document.getElementById("linkLogin");
       const linkCadastro = document.getElementById("linkCadastro");
-      if (linkLogin) linkLogin.style.display = "none";
-      if (linkCadastro) linkCadastro.style.display = "none";
-    }
-  });
-</script>
 
-<!-- catalogo.html -->
-<script>
-  const produtos = [
-    { nome: "Bolo de cenoura", descricao: "Bolo de cenoura...", preco: 2.5, imagem: "d1.jpg" },
-    { nome: "Bolo no pote", descricao: "Bolo no pote...", preco: 2.5, imagem: "d2.jpg" },
-    { nome: "Mini bolo", descricao: "Mini bolo...", preco: 2.5, imagem: "d3.jpg" },
-    { nome: "Pudim", descricao: "Pudim...", preco: 3.0, imagem: "d4.jpg" }
-  ];
-
-  const produtosContainer = document.getElementById("produtos");
-
-  produtos.forEach((produto) => {
-    const div = document.createElement("div");
-    div.classList.add("produto");
-    div.innerHTML = `
-      <img src="${produto.imagem}" alt="${produto.nome}" />
-      <h3>${produto.nome}</h3>
-      <p>${produto.descricao}</p>
-      <p><strong>R$ ${produto.preco.toFixed(2)}</strong></p>
-      <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
-    `;
-    produtosContainer.appendChild(div);
-  });
-
-  function adicionarAoCarrinho(produto) {
-    let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-    const existente = carrinho.find(item => item.nome === produto.nome);
-    if (existente) {
-      existente.quantidade += 1;
-    } else {
-      produto.quantidade = 1;
-      carrinho.push(produto);
-    }
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-    alert(`${produto.nome} adicionado ao carrinho!`);
-  }
-</script>
-
-<!-- carrinho.html -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-  const firebaseConfig = { ... };
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-  const usuarioLogado = JSON.parse(localStorage.getItem("usuario")) || null;
-  const carrinhoContainer = document.getElementById("carrinho");
-  const finalizarBtn = document.getElementById("finalizarPedido");
-
-  function renderCarrinho() {
-    carrinhoContainer.innerHTML = "";
-    if (carrinho.length === 0) {
-      carrinhoContainer.innerHTML = "<p>O carrinho está vazio.</p>";
-      return;
-    }
-
-    let total = 0;
-    carrinho.forEach((item, index) => {
-      if (!item.quantidade) item.quantidade = 1;
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <strong>${item.nome}</strong> - R$ ${item.preco.toFixed(2)} x 
-        <input type="number" min="1" value="${item.quantidade}" style="width: 50px" data-index="${index}" class="quantidadeInput">
-        = R$ ${(item.preco * item.quantidade).toFixed(2)}
-        <br><br>
-      `;
-      carrinhoContainer.appendChild(div);
-      total += item.preco * item.quantidade;
-    });
-
-    const totalDiv = document.createElement("div");
-    totalDiv.innerHTML = `<hr><strong>Total: R$ ${total.toFixed(2)}</strong>`;
-    carrinhoContainer.appendChild(totalDiv);
-
-    document.querySelectorAll(".quantidadeInput").forEach(input => {
-      input.addEventListener("change", (e) => {
-        const index = e.target.dataset.index;
-        carrinho[index].quantidade = parseInt(e.target.value) || 1;
-        localStorage.setItem("carrinho", JSON.stringify(carrinho));
-        renderCarrinho();
-      });
-    });
-  }
-
-  if (carrinhoContainer && finalizarBtn) {
-    renderCarrinho();
-    finalizarBtn.addEventListener("click", () => {
-      if (usuarioLogado) {
-        const pedidoRef = push(ref(db, "pedidos"));
-        set(pedidoRef, {
-          usuarioId: usuarioLogado.id,
-          carrinho,
-          data: new Date().toISOString()
-        });
-        alert("Pedido finalizado!");
-        localStorage.removeItem("carrinho");
-        window.location.href = "pagamento.html";
+      if (user) {
+        if (linkLogin) linkLogin.style.display = "none";
+        if (linkCadastro) linkCadastro.style.display = "none";
       } else {
-        alert("Faça login antes de finalizar o pedido.");
-        window.location.href = "login.html";
+        if (linkLogin) linkLogin.style.display = "inline";
+        if (linkCadastro) linkCadastro.style.display = "inline";
       }
     });
-  }
-</script>
-
-<!-- pagamento.html -->
-<script>
-  setTimeout(() => {
-    fetch("https://formsubmit.co/ajax/SEU_EMAIL@email.com", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        message: "Novo pedido recebido no Caseirinhos da Ne!",
-        assunto: "Pedido confirmado"
-      })
-    }).then(() => {
-      alert("Pagamento confirmado e email enviado!");
-      window.location.href = "index.html";
-    }).catch(() => {
-      alert("Erro ao enviar email, mas pagamento confirmado.");
-      window.location.href = "index.html";
-    });
-  }, 3000);
-</script>
+  </script>
+</body>
+</html>
