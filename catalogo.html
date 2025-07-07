@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Catálogo</title>
-</head>
+  <link rel="stylesheet" href="style.css">
   <style>
     * {
       margin: 0;
@@ -173,14 +173,15 @@
       }
     }
   </style>
+</head>
 <body>
   <header>
     <h1>Caseirinhos da Ne</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="carrinho.html">Carrinho</a>
-      <a href="login.html">Login</a>
-      <a href="cadastro.html">Cadastro</a>
+      <a href="login.html" id="linkLogin">Login</a>
+      <a href="cadastro.html" id="linkCadastro">Cadastro</a>
     </nav>
   </header>
 
@@ -229,16 +230,33 @@
         <h3>${produto.nome}</h3>
         <p>${produto.descricao}</p>
         <p><strong>R$ ${produto.preco.toFixed(2)}</strong></p>
+        <label>Qtd: <input type="number" min="1" value="1" style="width:50px" id="qtd-${produto.nome}"></label><br>
         <button onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Adicionar ao carrinho</button>
       `;
       produtosContainer.appendChild(div);
     });
 
     function adicionarAoCarrinho(produto) {
+      const qtd = parseInt(document.getElementById(`qtd-${produto.nome}`).value) || 1;
       let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-      carrinho.push(produto);
+      const index = carrinho.findIndex(item => item.nome === produto.nome);
+
+      if (index >= 0) {
+        carrinho[index].quantidade += qtd;
+      } else {
+        produto.quantidade = qtd;
+        carrinho.push(produto);
+      }
+
       localStorage.setItem("carrinho", JSON.stringify(carrinho));
-      alert(`${produto.nome} adicionado ao carrinho!`);
+      alert(`${qtd}x ${produto.nome} adicionado ao carrinho!`);
+    }
+
+    // Esconder links se logado
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario) {
+      document.getElementById("linkLogin").style.display = "none";
+      document.getElementById("linkCadastro").style.display = "none";
     }
   </script>
 </body>
