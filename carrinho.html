@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
@@ -167,6 +167,7 @@
       }
       a{
         decoration: none;
+      }
     }
   </style>
 </head>
@@ -177,7 +178,6 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="catalogo.html">Catálogo</a>
-      
     </nav>
   </header>
 
@@ -188,43 +188,48 @@
   <button id="finalizarPedido">Finalizar Pedido</button>
 
   <script>
-  const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-  const carrinhoContainer = document.getElementById("carrinho");
-  let total = 0;
+    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+    const carrinhoContainer = document.getElementById("carrinho");
+    let total = 0;
 
-  // Exibe os produtos do carrinho
-  if (carrinho.length === 0) {
-    carrinhoContainer.innerHTML = "<p>Adicione um produto primeiro.</p>";
-  } else {
-    carrinho.forEach((produto) => {
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <h4>${produto.nome}</h4>
-        <p>Descrição: ${produto.descricao}</p>
-        <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
-      `;
-      carrinhoContainer.appendChild(div);
-      total += produto.preco;
-    });
-
-    // Mostra o total
-    const totalElement = document.createElement("h3");
-    totalElement.textContent = `Total: R$ ${total.toFixed(2)}`;
-    carrinhoContainer.appendChild(totalElement);
-  }
-
-  // Função para finalizar o pedido
-  document.getElementById("finalizarPedido").addEventListener("click", function () {
+    // Exibe os produtos do carrinho
     if (carrinho.length === 0) {
-      alert("Adicione um produto primeiro!");
+      carrinhoContainer.innerHTML = "<p>Adicione um produto primeiro.</p>";
     } else {
-      // Aqui pode ir lógica de envio para banco, e-mail, etc.
-      alert("Pedido finalizado com sucesso!");
-      localStorage.removeItem("carrinho"); // limpa carrinho após finalizar
-      window.location.href = "pagamento.html";
+      carrinho.forEach((produto) => {
+        // Se não existir quantidade, considera 1
+        const quantidade = produto.quantidade ? produto.quantidade : 1;
+        const precoTotalProduto = produto.preco * quantidade;
+
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <h4>${produto.nome}</h4>
+          <p>Descrição: ${produto.descricao}</p>
+          <p>Preço unitário: R$ ${produto.preco.toFixed(2)}</p>
+          <p>Quantidade: ${quantidade}</p>
+          <p><strong>Subtotal: R$ ${precoTotalProduto.toFixed(2)}</strong></p>
+        `;
+        carrinhoContainer.appendChild(div);
+        total += precoTotalProduto;
+      });
+
+      // Mostra o total
+      const totalElement = document.createElement("h3");
+      totalElement.textContent = `Total: R$ ${total.toFixed(2)}`;
+      carrinhoContainer.appendChild(totalElement);
     }
-  });
-</script>
+
+    // Função para finalizar o pedido
+    document.getElementById("finalizarPedido").addEventListener("click", function () {
+      if (carrinho.length === 0) {
+        alert("Adicione um produto primeiro!");
+      } else {
+        alert("Pedido finalizado com sucesso!");
+        localStorage.removeItem("carrinho"); // limpa carrinho após finalizar
+        window.location.href = "pagamento.html";
+      }
+    });
+  </script>
 
 </body>
 </html>
