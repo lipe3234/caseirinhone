@@ -5,11 +5,8 @@
   <title>Pagamento - Caseirinhos da Ne</title>
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to bottom right, #ffe0f0, #ffffff);
@@ -21,7 +18,6 @@
       align-items: center;
       padding: 20px;
     }
-
     header {
       background-color: #ff8fc1;
       padding: 20px;
@@ -33,12 +29,10 @@
       width: 100%;
       z-index: 1000;
     }
-
     header h1 {
       font-size: 2rem;
       animation: slideIn 0.8s ease-in-out;
     }
-
     nav {
       display: flex;
       justify-content: center;
@@ -46,7 +40,6 @@
       margin-top: 15px;
       flex-wrap: wrap;
     }
-
     nav a {
       color: white;
       text-decoration: none;
@@ -55,11 +48,9 @@
       position: relative;
       transition: color 0.3s;
     }
-
     nav a:hover {
       color: #ffe9f3;
     }
-
     nav a::after {
       content: '';
       display: block;
@@ -69,17 +60,14 @@
       transition: width 0.3s;
       margin: auto;
     }
-
     nav a:hover::after {
       width: 100%;
     }
-
     h2 {
       color: #ff5e99;
       margin: 30px auto 20px;
       text-align: center;
     }
-
     main {
       background-color: #fff0f7;
       padding: 30px;
@@ -90,7 +78,6 @@
       text-align: center;
       margin: 40px auto;
     }
-
     #pedidoProdutos div {
       background: #ffffff;
       padding: 20px;
@@ -99,29 +86,24 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       transition: transform 0.2s ease;
     }
-
     #pedidoProdutos div:hover {
       transform: scale(1.02);
     }
-
     #pedidoProdutos h4 {
       color: #ff5e99;
       font-size: 1.2rem;
       margin-bottom: 8px;
     }
-
     #pedidoProdutos p {
       font-size: 1rem;
       color: #444;
     }
-
     #totalPedido {
       text-align: right;
       font-size: 1.4rem;
       color: #e84393;
       margin-top: 20px;
     }
-
     #formCliente {
       background: #fff;
       padding: 25px 20px;
@@ -131,14 +113,12 @@
       margin: 30px auto 10px;
       text-align: left;
     }
-
     #formCliente label {
       display: block;
       margin-bottom: 6px;
       font-weight: bold;
       color: #ff5e99;
     }
-
     #formCliente input, #formCliente textarea {
       width: 100%;
       padding: 8px 10px;
@@ -149,11 +129,9 @@
       font-family: 'Segoe UI', sans-serif;
       resize: vertical;
     }
-
     #formCliente textarea {
       min-height: 60px;
     }
-
     #enviarPedidoBtn {
       background-color: #e84393;
       color: white;
@@ -166,11 +144,9 @@
       display: block;
       margin: 0 auto;
     }
-
     #enviarPedidoBtn:hover {
       background-color: #d63384;
     }
-
     #mensagemConfirmacao {
       font-size: 1.3rem;
       color: #d63384;
@@ -178,23 +154,19 @@
       display: none;
       text-align: center;
     }
-
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(-30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     @media (max-width: 768px) {
       nav {
         flex-direction: column;
         gap: 10px;
       }
-
       main {
         margin: 20px 10px;
         padding: 20px;
       }
-
       #formCliente {
         max-width: 100%;
       }
@@ -219,15 +191,22 @@
     </div>
     <div id="totalPedido"></div>
 
-    <form id="formCliente">
+    <form id="formCliente" method="POST" action="https://formsubmit.co/ajax/phillipelimapravatti@gmail.com">
       <label for="nomeCliente">Nome Completo</label>
-      <input type="text" id="nomeCliente" name="nomeCliente" placeholder="Seu nome completo" required />
+      <input type="text" id="nomeCliente" name="Nome" placeholder="Seu nome completo" required />
 
       <label for="emailCliente">Email</label>
-      <input type="email" id="emailCliente" name="emailCliente" placeholder="Seu email" required />
+      <input type="email" id="emailCliente" name="Email" placeholder="Seu email" required />
+
+      <label for="telefoneCliente">Telefone</label>
+      <input type="tel" id="telefoneCliente" name="Telefone" placeholder="Seu número de telefone" required pattern="[0-9\s\-\+\(\)]{8,}" title="Digite um telefone válido"/>
 
       <label for="enderecoCliente">Endereço</label>
-      <textarea id="enderecoCliente" name="enderecoCliente" placeholder="Seu endereço completo" required></textarea>
+      <textarea id="enderecoCliente" name="Endereço" placeholder="Seu endereço completo" required></textarea>
+
+      <!-- Campos ocultos para enviar lista de produtos e total no email -->
+      <input type="hidden" id="listaProdutos" name="Lista de Produtos" />
+      <input type="hidden" id="totalPedidoHidden" name="Total do Pedido" />
 
       <button type="submit" id="enviarPedidoBtn">Enviar Pedido</button>
     </form>
@@ -239,7 +218,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
 
   <script>
-    // Config Firebase
+    // Config Firebase (mantive pra compatibilidade, mas não usado aqui)
     const firebaseConfig = {
       apiKey: "AIzaSyBgPvmrfclA8XTGtTsSCeDE390wVK46V9E",
       authDomain: "caseirinhosne.firebaseapp.com",
@@ -284,7 +263,21 @@
 
     mostrarPedido(pedido);
 
-    // Esconde links login/cadastro se estiver logado
+    // Atualiza os campos ocultos com a lista de produtos e total
+    function atualizarCamposOcultos() {
+      const listaProdutos = pedido.map((produto, i) =>
+        `${i + 1}. ${produto.nome} - R$ ${produto.preco.toFixed(2)}`
+      ).join('\n');
+
+      const total = pedido.reduce((acc, p) => acc + p.preco, 0).toFixed(2);
+
+      document.getElementById('listaProdutos').value = listaProdutos;
+      document.getElementById('totalPedidoHidden').value = `R$ ${total}`;
+    }
+
+    atualizarCamposOcultos();
+
+    // Esconde links login/cadastro se estiver logado (caso tenha esses links na página)
     firebase.auth().onAuthStateChanged((user) => {
       const loginLink = document.getElementById("linkLogin");
       const cadastroLink = document.getElementById("linkCadastro");
@@ -294,85 +287,53 @@
       }
     });
 
-    // Função para enviar email via AJAX
-    async function enviarEmail(dadosEmail) {
-      try {
-        const response = await fetch("http://localhost:3000/send-email", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(dadosEmail)
-        });
+    // Envio do formulário via AJAX para formsubmit.co
+    const form = document.getElementById('formCliente');
+    const mensagem = document.getElementById('mensagemConfirmacao');
 
-        if (response.ok) {
-          console.log("Email enviado com sucesso!");
-          return true;
-        } else {
-          console.error("Erro ao enviar o email.");
-          return false;
-        }
-      } catch (err) {
-        console.error("Erro na requisição:", err);
-        return false;
-      }
-    }
-
-    // Manipula envio do formulário
-    document.getElementById("formCliente").addEventListener("submit", async (e) => {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      const nome = document.getElementById("nomeCliente").value.trim();
-      const email = document.getElementById("emailCliente").value.trim();
-      const endereco = document.getElementById("enderecoCliente").value.trim();
+      // Validação extra se quiser (required já faz o básico)
+      const nome = document.getElementById('nomeCliente').value.trim();
+      const email = document.getElementById('emailCliente').value.trim();
+      const telefone = document.getElementById('telefoneCliente').value.trim();
+      const endereco = document.getElementById('enderecoCliente').value.trim();
 
-      if (!nome || !email || !endereco) {
-        alert("Por favor, preencha todos os campos.");
+      if (!nome || !email || !telefone || !endereco) {
+        alert('Por favor, preencha todos os campos.');
         return;
       }
 
-      // Monta mensagem dos produtos
-      const mensagemProdutos = pedido.map((produto, i) =>
-        `${i + 1}. ${produto.nome} - R$ ${produto.preco.toFixed(2)}`
-      ).join("\n");
+      const formData = new FormData(form);
 
-      // Monta corpo do email com dados do cliente e pedido
-      const mensagemCompleta = 
-        `Pedido aprovado e será processado.\n\n` +
-        `Cliente:\nNome: ${nome}\nEmail: ${email}\nEndereço: ${endereco}\n\n` +
-        `Produtos:\n${mensagemProdutos}\n\n` +
-        `Total: R$ ${pedido.reduce((acc, p) => acc + p.preco, 0).toFixed(2)}`;
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(response => {
+        if (response.ok) {
+          mensagem.style.display = 'block';
+          form.reset();
+          localStorage.removeItem('pedidoConfirmado');
+          localStorage.removeItem('carrinho');
 
-      const dadosEmail = {
-        to: "phillipelimapravatti@gmail.com",
-        subject: "Pedido aprovado - Caseirinhos da Ne",
-        message: mensagemCompleta
-      };
+          // Esconder resumo pedido e total
+          document.getElementById("pedidoProdutos").style.display = "none";
+          document.getElementById("totalPedido").style.display = "none";
 
-      const sucesso = await enviarEmail(dadosEmail);
-
-      if(sucesso){
-        // Limpa localStorage
-        localStorage.removeItem("pedidoConfirmado");
-        localStorage.removeItem("carrinho");
-
-        // Oculta formulário e pedido
-        document.getElementById("formCliente").style.display = "none";
-        document.getElementById("pedidoProdutos").style.display = "none";
-        document.getElementById("totalPedido").style.display = "none";
-
-        // Mostra mensagem de confirmação
-        const msg = document.getElementById("mensagemConfirmacao");
-        msg.style.display = "block";
-
-        // Redireciona para a home depois de 3 segundos
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 3000);
-
-      } else {
-        alert("Houve um erro ao enviar o pedido. Tente novamente mais tarde.");
-      }
+          // Redirecionar para home depois de 5 segundos
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 5000);
+        } else {
+          alert('Erro ao enviar, tente novamente.');
+        }
+      })
+      .catch(() => {
+        alert('Erro na conexão, tente novamente.');
+      });
     });
   </script>
 </body>
