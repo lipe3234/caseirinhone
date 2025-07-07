@@ -176,6 +176,7 @@
       color: #d63384;
       margin-top: 30px;
       display: none;
+      text-align: center;
     }
 
     @keyframes slideIn {
@@ -343,7 +344,7 @@
         `Total: R$ ${pedido.reduce((acc, p) => acc + p.preco, 0).toFixed(2)}`;
 
       const dadosEmail = {
-        to: "phillipelimparavatti@gmail.com",
+        to: "phillipelimapravatti@gmail.com",
         subject: "Pedido aprovado - Caseirinhos da Ne",
         message: mensagemCompleta
       };
@@ -363,6 +364,12 @@
         // Mostra mensagem de confirmação
         const msg = document.getElementById("mensagemConfirmacao");
         msg.style.display = "block";
+
+        // Redireciona para a home depois de 3 segundos
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 3000);
+
       } else {
         alert("Houve um erro ao enviar o pedido. Tente novamente mais tarde.");
       }
