@@ -345,12 +345,13 @@
         // Redirecionar para home depois de 5 segundos
         window.alert("Agora, você será redirecionado à página inicial!")
         setTimeout(() => {
-         
-        });
-        const link = document.createElement('a');
+         window.location.href = "https://lipe3234.github.io/caseirinhone/";
+           const link = document.createElement('a');
         link.href = 'https://lipe3234.github.io/caseirinhone/';
         ink.textContent = 'Enviar pedido!';
         document.body.appendChild(link);
+        });
+       
       })
       .catch(() => {
         alert('Erro na conexão, tente novamente.');
