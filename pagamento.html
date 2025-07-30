@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
@@ -211,9 +211,8 @@
       <input type="hidden" id="listaProdutos" name="Lista de Produtos" />
       <input type="hidden" id="totalPedidoHidden" name="Total do Pedido" />
 
-      <button type="submit" id="enviarPedidoBtn"><span style="text-decoration: none; cursor: pointer; color: white;" onclick="window.location.href='https://lipe3234.github.io/caseirinhone/';">
-  Enviar pedido!</span>
-</button>
+      <!-- Botão corrigido: removido o span com onclick -->
+      <button type="submit" id="enviarPedidoBtn">Enviar pedido!</button>
     </form>
 
     <div id="mensagemConfirmacao">Seu pedido foi aprovado e será processado.</div>
@@ -311,7 +310,6 @@
         return;
       }
 
-      // ✅ Atualiza os campos ocultos com os dados do pedido
       atualizarCamposOcultos();
 
       const formData = new FormData(form);
@@ -329,9 +327,8 @@
         document.getElementById("pedidoProdutos").style.display = "none";
         document.getElementById("totalPedido").style.display = "none";
 
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 5000);
+        // redireciona imediatamente para home após envio
+        window.location.href = "index.html";
       })
       .catch(() => {
         alert('Erro na conexão, tente novamente.');
