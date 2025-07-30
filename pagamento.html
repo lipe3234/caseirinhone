@@ -347,7 +347,10 @@
         setTimeout(() => {
           window.location.href = "https://lipe3234.github.io/caseirinhone/";
         });
-
+        const link = document.createElement('a');
+        link.href = 'https://lipe3234.github.io/caseirinhone/';
+        ink.textContent = 'Enviar pedido!';
+        document.body.appendChild(link);
       })
       .catch(() => {
         alert('Erro na conexão, tente novamente.');
