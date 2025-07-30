@@ -304,7 +304,8 @@
     });
     
     // Envio do formulário via AJAX para formsubmit.co
-    const form = document.getElementById('formCliente');
+    const pedido = JSON.parse(localStorage.getItem("pedidoConfirmado")) || [];
+    const form = document.getElementById('formCliente'|"pedidoConfirmado");
     const mensagem = document.getElementById('mensagemConfirmacao');
 
     form.addEventListener('submit', function (e) {
