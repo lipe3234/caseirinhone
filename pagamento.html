@@ -332,17 +332,18 @@
       .then(() => {
         mensagem.style.display = 'block';
         form.reset();
-        
+        localStorage.removeItem('pedidoConfirmado');
+        localStorage.removeItem('carrinho');
 
         // Esconder resumo pedido e total
-        document.getElementById("pedidoProdutos").style.display = "none";
-        document.getElementById("totalPedido").style.display = "none";
+        document.getElementById("pedidoProdutos").style.display = "";
+        document.getElementById("totalPedido").style.display = "";
 
         // Redirecionar para home depois de 5 segundos
         window.alert("Agora, você será redirecionado à página inicial!")
         setTimeout(() => {
           window.location.href = "https://lipe3234.github.io/caseirinhone/";
-        }, 5000);
+        });
 
       })
       .catch(() => {
