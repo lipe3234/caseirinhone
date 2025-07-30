@@ -299,6 +299,19 @@
         if(cadastroLink) cadastroLink.style.display = "none";
       }
     });
+    document.getElementById('paymentForm').addEventListener('submit', function (event) {
+  // Pega o carrinho do localStorage
+   const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+  // Formata os itens do carrinho em texto
+    let pedidoTexto = '';
+    carrinho.forEach(item => {
+      pedidoTexto += `${item.nome} - ${item.sabor} - Quantidade: ${item.quantidade}\n`;
+    });
+
+    //  Coloca no input oculto
+    document.getElementById('pedidoInput').value = pedidoTexto;
+  });
 
     // Envio do formulário via AJAX para formsubmit.co
     const form = document.getElementById('formCliente');
