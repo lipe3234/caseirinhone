@@ -332,8 +332,7 @@
       .then(() => {
         mensagem.style.display = 'block';
         form.reset();
-        localStorage.removeItem('pedidoConfirmado');
-        localStorage.removeItem('carrinho');
+        
 
         // Esconder resumo pedido e total
         document.getElementById("pedidoProdutos").style.display = "none";
@@ -344,7 +343,6 @@
         setTimeout(() => {
           window.location.href = "https://lipe3234.github.io/caseirinhone/";
         }, 5000);
-        <span onclick="https://lipe3234.github.io/caseirinhone/;"> </span>
 
       })
       .catch(() => {
