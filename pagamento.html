@@ -1,10 +1,9 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
   <title>Pagamento - Caseirinhos da Ne</title>
   <style>
-    /* (estilo mantido igual ao seu original) */
     * {
       margin: 0; padding: 0; box-sizing: border-box;
     }
@@ -147,8 +146,9 @@
     }
     #enviarPedidoBtn:hover {
       background-color: #d63384;
+     
     }
-    a {
+    a{
       text-decoration: none;
       color: white;
     }
@@ -159,7 +159,6 @@
       display: none;
       text-align: center;
     }
-    
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(-30px); }
       to { opacity: 1; transform: translateY(0); }
@@ -176,7 +175,6 @@
       #formCliente {
         max-width: 100%;
       }
-    }
   </style>
 </head>
 <body>
@@ -192,7 +190,9 @@
   <main>
     <h2>Confirme seu Pedido e Informe seus Dados</h2>
 
-    <div id="pedidoProdutos"></div>
+    <div id="pedidoProdutos">
+      <!-- Produtos do pedido serão listados aqui -->
+    </div>
     <div id="totalPedido"></div>
 
     <form id="formCliente" method="POST" action="https://formsubmit.co/ajax/phillipelimapravatti@gmail.com">
@@ -207,12 +207,11 @@
 
       <label for="enderecoCliente">Endereço</label>
       <textarea id="enderecoCliente" name="Endereço" placeholder="Seu endereço completo, com número" required></textarea>
-
+      <!-- Campos ocultos para enviar lista de produtos e total no email -->
       <input type="hidden" id="listaProdutos" name="Lista de Produtos" />
       <input type="hidden" id="totalPedidoHidden" name="Total do Pedido" />
 
-      <!-- Botão corrigido: removido o span com onclick -->
-      <button type="submit" id="enviarPedidoBtn">Enviar pedido!</button>
+      <button type="submit" id="enviarPedidoBtn"><a href="https://lipe3234.github.io/caseirinhone/">Enviar Pedido</a></button>
     </form>
 
     <div id="mensagemConfirmacao">Seu pedido foi aprovado e será processado.</div>
@@ -222,6 +221,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
 
   <script>
+    // Config Firebase (mantive pra compatibilidade, mas não usado aqui)
     const firebaseConfig = {
       apiKey: "AIzaSyBgPvmrfclA8XTGtTsSCeDE390wVK46V9E",
       authDomain: "caseirinhosne.firebaseapp.com",
@@ -234,13 +234,16 @@
     };
     firebase.initializeApp(firebaseConfig);
 
+    // Pega o pedido salvo no localStorage
     const pedido = JSON.parse(localStorage.getItem("pedidoConfirmado")) || [];
 
-    if (pedido.length === 0) {
+    // Se não houver pedido, redireciona para home
+    if(pedido.length === 0) {
       alert("Nenhum pedido encontrado. Você será redirecionado para a página inicial.");
       window.location.href = "index.html";
     }
 
+    // Mostra resumo dos produtos no pedido incluindo quantidade e subtotal
     function mostrarPedido(pedido) {
       const container = document.getElementById("pedidoProdutos");
       const totalDiv = document.getElementById("totalPedido");
@@ -248,58 +251,63 @@
       let total = 0;
 
       pedido.forEach((produto, i) => {
-        const quantidade = produto.quantidade || 1;
+        const quantidade = produto.quantidade ? produto.quantidade : 1;
         const subtotal = produto.preco * quantidade;
 
         const div = document.createElement("div");
-        div.innerHTML = `
+        div.innerHTML = 
           <h4>${produto.nome}</h4>
           <p>Descrição: ${produto.descricao}</p>
           <p>Preço unitário: R$ ${produto.preco.toFixed(2)}</p>
           <p>Quantidade: ${quantidade}</p>
           <p><strong>Subtotal: R$ ${subtotal.toFixed(2)}</strong></p>
-        `;
+        ;
         container.appendChild(div);
         total += subtotal;
       });
 
-      totalDiv.textContent = `Total do Pedido: R$ ${total.toFixed(2)}`;
+      totalDiv.textContent = Total do Pedido: R$ ${total.toFixed(2)};
     }
 
+    mostrarPedido(pedido);
+
+    // Atualiza os campos ocultos com a lista de produtos (com quantidade) e total
     function atualizarCamposOcultos() {
       const listaProdutos = pedido.map((produto, i) => {
-        const quantidade = produto.quantidade || 1;
+        const quantidade = produto.quantidade ? produto.quantidade : 1;
         const subtotal = produto.preco * quantidade;
-        return `${i + 1}. ${produto.nome} - Quantidade: ${quantidade} - Subtotal: R$ ${subtotal.toFixed(2)}`;
+        return ${i + 1}. ${produto.nome} - Quantidade: ${quantidade} - Subtotal: R$ ${subtotal.toFixed(2)};
       }).join('\n');
 
       const total = pedido.reduce((acc, p) => {
-        const q = p.quantidade || 1;
+        const q = p.quantidade ? p.quantidade : 1;
         return acc + p.preco * q;
       }, 0).toFixed(2);
 
       document.getElementById('listaProdutos').value = listaProdutos;
-      document.getElementById('totalPedidoHidden').value = `R$ ${total}`;
+      document.getElementById('totalPedidoHidden').value = R$ ${total};
     }
 
-    mostrarPedido(pedido);
     atualizarCamposOcultos();
 
+    // Esconde links login/cadastro se estiver logado (caso tenha esses links na página)
     firebase.auth().onAuthStateChanged((user) => {
       const loginLink = document.getElementById("linkLogin");
       const cadastroLink = document.getElementById("linkCadastro");
       if (user) {
-        if (loginLink) loginLink.style.display = "none";
-        if (cadastroLink) cadastroLink.style.display = "none";
+        if(loginLink) loginLink.style.display = "none";
+        if(cadastroLink) cadastroLink.style.display = "none";
       }
     });
-
+    
+    // Envio do formulário via AJAX para formsubmit.co
     const form = document.getElementById('formCliente');
     const mensagem = document.getElementById('mensagemConfirmacao');
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
+      // Validação extra se quiser (required já faz o básico)
       const nome = document.getElementById('nomeCliente').value.trim();
       const email = document.getElementById('emailCliente').value.trim();
       const telefone = document.getElementById('telefoneCliente').value.trim();
@@ -310,25 +318,28 @@
         return;
       }
 
-      atualizarCamposOcultos();
-
       const formData = new FormData(form);
 
       fetch(form.action, {
         method: 'POST',
         body: formData
+        // REMOVIDO: headers: { 'Accept': 'application/json' }
       })
-      .then(response => response.text())
+      .then(response => response.text())  // receber como texto
       .then(() => {
         mensagem.style.display = 'block';
         form.reset();
         localStorage.removeItem('pedidoConfirmado');
         localStorage.removeItem('carrinho');
+
+        // Esconder resumo pedido e total
         document.getElementById("pedidoProdutos").style.display = "none";
         document.getElementById("totalPedido").style.display = "none";
 
-        // redireciona imediatamente para home após envio
-        window.location.href = "index.html";
+        // Redirecionar para home depois de 5 segundos
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 5000);
       })
       .catch(() => {
         alert('Erro na conexão, tente novamente.');
