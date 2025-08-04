@@ -343,11 +343,10 @@
         document.getElementById("pedidoProdutos").style.display = "";
         document.getElementById("totalPedido").style.display = "";
 
-        // Redirecionar para home depois de 5 segundos
-        window.alert("Agora, você será redirecionado à página inicial!")
-        setTimeout(() => {
-        window.open('https://lipe3234.github.io/caseirinhone/');
-        // Abrir um link em uma nova aba
+        const link = document.createElement("a");
+        link.href = "https://www.google.com";
+        link.textContent = "Ir para o Google";
+        link.target = "_blank"; // abre em nova aba (opcional)
         
 
         
